@@ -1,0 +1,134 @@
+@import "tailwindcss";
+
+/* Design tokens: DESIGN.md section 3. Keep names and values in sync with the spec. */
+@theme {
+  --color-*: initial;
+
+  --color-brand: #de060f;
+  --color-brand-dark: #b3050d;
+  --color-brand-tint: #fdebec;
+  --color-ink: #16202a;
+  --color-body: #3d4752;
+  --color-muted: #5e6772;
+  --color-paper: #f7f5f1;
+  --color-line: #e6e1d8;
+  --color-white: #ffffff;
+  --color-gold: #d99a1e;
+  --color-whatsapp: #1f8f4e;
+  --color-whatsapp-tint: #e7f5ec;
+  --color-success-tint: #f1f8f3;
+  --color-footer-text: #c5cdd4;
+  --color-footer-muted: #9aa6b1;
+  --color-footer-line: #2c3846;
+  --color-footer-social: #3a4754;
+  --color-topbar-text: #d6dce1;
+  --color-transparent: transparent;
+  --color-current: currentColor;
+
+  /* Radius */
+  --radius-control: 10px; /* buttons, inputs, small panels */
+  --radius-card: 14px; /* cards, images */
+  --radius-panel: 16px; /* search bar, booking card, CTA panels */
+  --radius-pill: 999px; /* pills, badges, avatars */
+
+  /* Shadows: floating elements only; cards use a line border instead */
+  --shadow-panel: 0 24px 48px -24px rgba(22, 32, 42, 0.35);
+  --shadow-float: 0 20px 40px -24px rgba(22, 32, 42, 0.4);
+  --shadow-bar: 0 -8px 24px -12px rgba(22, 32, 42, 0.25);
+
+  /* Layout */
+  --container-page: 1280px;
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 980px;
+  --breakpoint-xl: 1280px;
+
+  /* Type scale (DESIGN.md typography table) */
+  --text-hero: clamp(3rem, 6.4vw, 5.6rem);
+  --text-hero--line-height: 1;
+  --text-hero--letter-spacing: -0.02em;
+  --text-page: clamp(2.6rem, 5vw, 4rem);
+  --text-page--line-height: 1;
+  --text-page--letter-spacing: -0.02em;
+  --text-section: clamp(2.2rem, 3.6vw, 3.25rem);
+  --text-section--line-height: 1.06;
+  --text-section--letter-spacing: -0.015em;
+  --text-subsection: 2rem;
+  --text-subsection--line-height: 1.15;
+  --text-subsection--letter-spacing: -0.01em;
+  --text-card: 1.5rem;
+  --text-card--line-height: 1.15;
+  --text-quote: 1.3rem;
+  --text-quote--line-height: 1.45;
+  --text-lead: clamp(1.1rem, 1.5vw, 1.3rem);
+  --text-lead--line-height: 1.55;
+  --text-copy: 1.0625rem;
+  --text-copy--line-height: 1.6;
+  --text-meta: 0.92rem;
+  --text-meta--line-height: 1.4;
+  --text-price: 1.45rem;
+  --text-price--line-height: 1.2;
+  --text-price-lg: 2rem;
+  --text-price-lg--line-height: 1.2;
+}
+
+/* Fonts come from next/font CSS variables set on <html> in layout.tsx */
+@theme inline {
+  --font-sans: var(--font-jost), "Futura", "Century Gothic", sans-serif;
+  --font-serif: var(--font-newsreader), Georgia, serif;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background: var(--color-white);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: var(--text-copy);
+    line-height: var(--text-copy--line-height);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: clip;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-optical-sizing: auto;
+    color: var(--color-ink);
+  }
+
+  a:hover {
+    color: var(--color-brand-dark);
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-brand);
+    outline-offset: 3px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@utility container-page {
+  width: 100%;
+  max-width: var(--container-page);
+  margin-inline: auto;
+  padding-inline: 24px;
+}
