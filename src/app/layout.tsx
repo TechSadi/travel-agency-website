@@ -1,5 +1,9 @@
 import type { Metadata } from "next";
 import { Jost, Newsreader } from "next/font/google";
+import { Footer } from "@/components/layout/Footer";
+import { Header } from "@/components/layout/Header";
+import { MobileActionBar } from "@/components/layout/MobileActionBar";
+import { TopBar } from "@/components/layout/TopBar";
 import "./globals.css";
 
 // next/font only allows the opsz axis with the variable weight, which covers 400–600.
@@ -34,7 +38,14 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en-IN" className={`${newsreader.variable} ${jost.variable}`}>
-      <body>{children}</body>
+      {/* Under 768px the fixed MobileActionBar covers the bottom of the page, so pad by its height. */}
+      <body className="flex min-h-dvh flex-col pb-[calc(var(--action-bar-height)+env(safe-area-inset-bottom))] md:pb-0">
+        <TopBar />
+        <Header />
+        <div className="flex-1">{children}</div>
+        <Footer />
+        <MobileActionBar />
+      </body>
     </html>
   );
 }

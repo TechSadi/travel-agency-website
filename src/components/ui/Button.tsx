@@ -32,7 +32,7 @@ type ButtonAsButton = CommonProps & { href?: undefined } & Omit<ComponentProps<"
 
 export function buttonClasses(variant: ButtonVariant = "primary", size: ButtonSize = "md", className?: string) {
   return clsx(
-    "inline-flex items-center justify-center gap-2.5 whitespace-nowrap rounded-control border font-sans text-base font-medium no-underline transition-colors",
+    "inline-flex items-center justify-center gap-2.5 whitespace-nowrap rounded-control border font-sans text-[1rem] font-medium no-underline transition-colors",
     variantClasses[variant],
     sizeClasses[size],
     className,
