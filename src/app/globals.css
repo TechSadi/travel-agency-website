@@ -52,7 +52,8 @@
   --text-hero: clamp(2.4rem, min(3.8vw, 7vh), 3.6rem);
   --text-hero--line-height: 1;
   --text-hero--letter-spacing: -0.02em;
-  --text-page: clamp(2.6rem, 5vw, 4rem);
+  /* Inner-page h1, a step below the Home hero. Smaller than DESIGN.md's clamp(2.6rem, 5vw, 4rem), by client request. */
+  --text-page: clamp(2.2rem, min(3.4vw, 6.5vh), 3rem);
   --text-page--line-height: 1;
   --text-page--letter-spacing: -0.02em;
   /* Smaller than DESIGN.md's clamp(2.2rem, 3.6vw, 3.25rem), by client request. */
@@ -173,6 +174,11 @@ body:has([data-page-action-bar]) [data-global-action-bar] {
 /* Full-bleed CTA band overlay (DESIGN.md section 3). */
 @utility overlay-cta {
   background-color: rgba(12, 18, 26, 0.62);
+}
+
+/* Photo page hero overlay (Destinations), from design-reference/destinations.html: even darkening for centred-left text. */
+@utility overlay-page-hero {
+  background-image: linear-gradient(180deg, rgba(12, 18, 26, 0.35) 0%, rgba(12, 18, 26, 0.7) 100%);
 }
 
 /* Horizontal scroll rows: keep scrolling, hide the bar. */

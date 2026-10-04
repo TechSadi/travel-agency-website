@@ -1,8 +1,8 @@
 "use client";
 
-import clsx from "clsx";
 import { Fragment, useState, type ReactNode } from "react";
 import { DepartureList } from "@/components/departures/DepartureList";
+import { FilterPill } from "@/components/ui/FilterPill";
 
 export type DepartureFilterRow = {
   key: string;
@@ -41,23 +41,15 @@ export function DepartureMonthFilter({ months, rows, limit, heading }: Departure
       <div className="mb-4 flex flex-wrap items-end justify-between gap-6 md:mb-9">
         {heading}
         <div role="group" aria-label="Filter departures by month" className="hidden flex-wrap gap-2 md:flex">
-          {options.map((option) => {
-            const pressed = option.value === selected;
-            return (
-              <button
-                key={option.value}
-                type="button"
-                aria-pressed={pressed}
-                onClick={() => setSelected(option.value)}
-                className={clsx(
-                  "min-h-[42px] cursor-pointer rounded-pill border px-[18px] text-[0.95rem] transition-colors",
-                  pressed ? "border-ink bg-ink text-white" : "border-line bg-white text-ink hover:border-ink",
-                )}
-              >
-                {option.label}
-              </button>
-            );
-          })}
+          {options.map((option) => (
+            <FilterPill
+              key={option.value}
+              selected={option.value === selected}
+              onClick={() => setSelected(option.value)}
+            >
+              {option.label}
+            </FilterPill>
+          ))}
         </div>
       </div>
 

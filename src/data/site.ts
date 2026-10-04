@@ -1,5 +1,8 @@
 // Real business details from DESIGN.md section 2. Do not change without the client.
 
+// Searching the business name finds the Google Maps listing pin; the building name alone lands a little off.
+const mapsQuery = "Suman Holidays, Fatehgunj, Vadodara";
+
 const address = {
   line1: "GF 03, Blue Diamond Complex",
   locality: "Fatehgunj",
@@ -38,8 +41,8 @@ export const site = {
       { days: "Sunday", time: "Closed" },
     ],
   },
-  mapsUrl:
-    "https://www.google.com/maps/search/?api=1&query=Blue+Diamond+Complex+Fatehgunj+Vadodara+390002",
+  mapsUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapsQuery)}`,
+  mapsEmbedUrl: `https://www.google.com/maps?q=${encodeURIComponent(mapsQuery)}&output=embed`,
   social: [
     { label: "Facebook", href: "#" },
     { label: "Instagram", href: "#" },

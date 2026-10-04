@@ -1,5 +1,8 @@
 import { getTripsByDestination } from "./trips";
-import type { Destination, DestinationSummary } from "./types";
+import type { Destination, DestinationSummary, Region } from "./types";
+
+/** Region filter order on the Destinations page. */
+export const regions: Region[] = ["India", "Asia", "Middle East", "Europe", "Africa", "Islands"];
 
 // Names, countries, images and package counts follow design-reference/destinations.html.
 export const destinations: Destination[] = [

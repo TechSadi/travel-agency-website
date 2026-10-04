@@ -42,7 +42,7 @@ export function TripHeader({ trip, crumb, hasReviews }: TripHeaderProps) {
               </Badge>
             ))}
           </div>
-          {/* Smaller than text-page and capped by viewport height, so the gallery starts higher on short laptop screens. */}
+          {/* Capped by viewport height, so the gallery starts higher on short laptop screens. */}
           <h1 className="text-[2.2rem] leading-[1.05] tracking-[-0.01em] md:text-[clamp(2.4rem,min(4.4vw,8vh),3.6rem)] md:leading-none md:tracking-[-0.02em]">{trip.title}</h1>
           <div className="mt-2.5 flex flex-wrap items-center gap-x-[22px] gap-y-2 text-[0.95rem] text-body md:mt-3.5 md:text-copy">
             <span className="inline-flex items-center gap-2">
