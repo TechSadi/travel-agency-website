@@ -118,6 +118,14 @@ export type Review = {
   tripLabel?: string;
 };
 
+/** A "Travel the way you like" tile on Home. Links to the trips list filtered by `type`. */
+export type Theme = {
+  title: string;
+  description: string;
+  type: TripType;
+  image: string;
+};
+
 export type TeamMember = { name: string; role: string; initials: string };
 
 export type Stat = { value: string; label: string };

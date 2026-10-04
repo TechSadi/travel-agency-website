@@ -33,7 +33,15 @@ export function StarRating({
     <span className={clsx("inline-flex items-center gap-1.5 text-ink", className)}>
       <span role="img" aria-label={label} className="inline-flex gap-0.5">
         {Array.from({ length: stars }, (_, i) => (
-          <svg key={i} width={size} height={size} viewBox="0 0 24 24" className="fill-gold" aria-hidden="true">
+          <svg
+            key={i}
+            width={size}
+            height={size}
+            viewBox="0 0 24 24"
+            // A single star is a symbol; in a row of five, stars past the rating are unfilled.
+            className={stars === 1 || i < Math.round(rating) ? "fill-gold" : "fill-line"}
+            aria-hidden="true"
+          >
             <path d={STAR_PATH} />
           </svg>
         ))}

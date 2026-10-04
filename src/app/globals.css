@@ -22,6 +22,7 @@
   --color-footer-line: #2c3846;
   --color-footer-social: #3a4754;
   --color-topbar-text: #d6dce1;
+  --color-photo-text: #e8ecef; /* secondary text on image overlays */
   --color-transparent: transparent;
   --color-current: currentColor;
 
@@ -131,10 +132,20 @@
   }
 }
 
-/* The 1280px is the content width; the 24px gutters sit outside it, as in the mockups. */
+/*
+ * The 1280px is the content width; the gutters sit outside it. DESIGN.md gives a flat
+ * 24px gutter, which leaves content almost touching the edges on 1280 to 1366px laptops,
+ * so the gutter grows with the viewport: 24px on phones up to 64px from about 1420px.
+ */
 @utility container-page {
+  --gutter: clamp(24px, 4.5vw, 64px);
   width: 100%;
-  max-width: calc(var(--container-page) + 48px);
+  max-width: calc(var(--container-page) + 2 * var(--gutter));
   margin-inline: auto;
-  padding-inline: 24px;
+  padding-inline: var(--gutter);
+}
+
+/* Destination tile legibility overlay (DESIGN.md section 3). */
+@utility overlay-tile {
+  background-image: linear-gradient(180deg, rgba(10, 16, 22, 0) 45%, rgba(10, 16, 22, 0.78) 100%);
 }
