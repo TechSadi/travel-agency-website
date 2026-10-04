@@ -88,8 +88,8 @@ export type Trip = {
   };
   /** Extension: previous price, for the "Save ₹X" pill. */
   priceWas?: number;
-  /** Extension: per child price for the booking estimate. Omitted when children cannot join. */
-  childPrice?: number;
+  /** Extension: children cannot join (e.g. a trek with a minimum age), so the booking card hides the Children stepper. */
+  adultsOnly?: boolean;
 };
 
 export type Region = "India" | "Asia" | "Middle East" | "Europe" | "Africa" | "Islands";

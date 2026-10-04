@@ -88,6 +88,8 @@
   :root {
     /* MobileActionBar: 1px border + 10px top padding + 48px buttons + 14px bottom padding */
     --action-bar-height: 73px;
+    /* Trip detail SectionTabs: 12px + 1.6 line + 12px padding, plus the 1px bottom border. */
+    --tabs-h: 53px;
   }
 
   html {
@@ -135,6 +137,14 @@
       scroll-behavior: auto !important;
     }
   }
+}
+
+/*
+ * A page with its own fixed bottom bar (the trip detail TripActionBar) replaces the site-wide one.
+ * Unlayered, so it beats the bar's own display utility.
+ */
+body:has([data-page-action-bar]) [data-global-action-bar] {
+  display: none;
 }
 
 /*

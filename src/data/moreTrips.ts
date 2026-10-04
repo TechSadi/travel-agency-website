@@ -373,6 +373,5 @@ export function variantOf(base: Trip, variant: TripVariant): Trip {
     gallery: [{ src: variant.heroImage, alt: imageAlt }, ...base.gallery.filter((image) => image.src !== variant.heroImage)],
     itinerary: base.itinerary.slice(0, variant.days),
     priceWas: undefined,
-    childPrice: base.childPrice === undefined ? undefined : Math.round((base.childPrice / base.priceFrom) * variant.priceFrom),
   };
 }
