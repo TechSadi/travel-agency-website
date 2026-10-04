@@ -100,6 +100,8 @@ export type Destination = {
   country: string;
   region: Region;
   image: string;
+  /** Extension: demo number of packages shown on tiles. Falls back to the count of trips in the data. */
+  packageCount?: number;
 };
 
 export type DestinationSummary = Destination & {

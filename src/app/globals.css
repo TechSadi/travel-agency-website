@@ -45,13 +45,18 @@
   --breakpoint-xl: 1280px;
 
   /* Type scale (DESIGN.md typography table) */
-  --text-hero: clamp(3rem, 6.4vw, 5.6rem);
+  /*
+   * Smaller than DESIGN.md's clamp(3rem, 6.4vw, 5.6rem), by client request. It also scales with
+   * viewport height so the hero buttons stay above the fold on short laptop screens.
+   */
+  --text-hero: clamp(2.4rem, min(3.8vw, 7vh), 3.6rem);
   --text-hero--line-height: 1;
   --text-hero--letter-spacing: -0.02em;
   --text-page: clamp(2.6rem, 5vw, 4rem);
   --text-page--line-height: 1;
   --text-page--letter-spacing: -0.02em;
-  --text-section: clamp(2.2rem, 3.6vw, 3.25rem);
+  /* Smaller than DESIGN.md's clamp(2.2rem, 3.6vw, 3.25rem), by client request. */
+  --text-section: clamp(1.9rem, 2.8vw, 2.6rem);
   --text-section--line-height: 1.06;
   --text-section--letter-spacing: -0.015em;
   --text-subsection: 2rem;
@@ -135,14 +140,37 @@
 /*
  * The 1280px is the content width; the gutters sit outside it. DESIGN.md gives a flat
  * 24px gutter, which leaves content almost touching the edges on 1280 to 1366px laptops,
- * so the gutter grows with the viewport: 24px on phones up to 64px from about 1420px.
+ * so the gutter grows with the viewport: 20px on phones (as in mobile-home.html) up to 64px from about 1420px.
  */
 @utility container-page {
-  --gutter: clamp(24px, 4.5vw, 64px);
+  --gutter: clamp(20px, 4.5vw, 64px);
   width: 100%;
   max-width: calc(var(--container-page) + 2 * var(--gutter));
   margin-inline: auto;
   padding-inline: var(--gutter);
+}
+
+/* Home hero legibility overlay (DESIGN.md section 3). */
+@utility overlay-hero {
+  background-image: linear-gradient(90deg, rgba(12, 18, 26, 0.82) 0%, rgba(12, 18, 26, 0.55) 45%, rgba(12, 18, 26, 0.1) 100%);
+}
+
+/* Phone hero overlay from design-reference/mobile-home.html: the text spans the full width, so darken top to bottom. */
+@utility overlay-hero-mobile {
+  background-image: linear-gradient(180deg, rgba(12, 18, 26, 0.25) 0%, rgba(12, 18, 26, 0.82) 100%);
+}
+
+/* Full-bleed CTA band overlay (DESIGN.md section 3). */
+@utility overlay-cta {
+  background-color: rgba(12, 18, 26, 0.62);
+}
+
+/* Horizontal scroll rows: keep scrolling, hide the bar. */
+@utility scrollbar-none {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 /* Destination tile legibility overlay (DESIGN.md section 3). */
