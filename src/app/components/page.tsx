@@ -6,6 +6,7 @@ import { DestinationTile } from "@/components/destinations/DestinationTile";
 import { ReviewCard } from "@/components/reviews/ReviewCard";
 import { ThemeTile } from "@/components/themes/ThemeTile";
 import { TripCard } from "@/components/trips/TripCard";
+import { toTripCardData } from "@/data/tripList";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { getDestinationSummaries } from "@/data/destinations";
@@ -61,7 +62,7 @@ export default function ComponentsPage() {
       <Section title="TripCard" description="Three cards in the Home grid, then the rest of the demo trips.">
         <div className="grid grid-cols-[repeat(auto-fill,minmax(min(100%,300px),1fr))] gap-7">
           {trips.map((trip) => (
-            <TripCard key={trip.slug} trip={trip} />
+            <TripCard key={trip.slug} trip={toTripCardData(trip)} />
           ))}
         </div>
       </Section>

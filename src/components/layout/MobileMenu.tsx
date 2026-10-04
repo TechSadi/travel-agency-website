@@ -2,16 +2,16 @@
 
 import clsx from "clsx";
 import { Clock, Menu, Phone, X } from "lucide-react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { WhatsAppIcon } from "@/components/ui/WhatsAppIcon";
 import { planTripHref } from "@/data/navigation";
 import { site } from "@/data/site";
+import { useModalDialog } from "@/lib/useModalDialog";
 import { Logo } from "./Logo";
 import { NavLinks } from "./NavLinks";
 
-const FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])';
 const DESKTOP_QUERY = "(min-width: 980px)";
 
 const iconButton =
@@ -33,53 +33,14 @@ export function MobileMenu() {
   // Following a link just closes; the new page takes focus.
   const closeOnNavigate = useCallback(() => setOpen(false), []);
 
-  useEffect(() => {
-    if (!open) return;
-    const panel = panelRef.current;
-    if (!panel) return;
-
-    const { body } = document;
-    const previousOverflow = body.style.overflow;
-    body.style.overflow = "hidden";
-
-    const focusables = () => Array.from(panel.querySelectorAll<HTMLElement>(FOCUSABLE));
-    closeButtonRef.current?.focus();
-
-    function onKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape") {
-        event.preventDefault();
-        closeAndRestoreFocus();
-        return;
-      }
-      if (event.key !== "Tab") return;
-
-      const items = focusables();
-      if (items.length === 0) return;
-      const first = items[0];
-      const last = items[items.length - 1];
-      const current = document.activeElement;
-
-      if (event.shiftKey && (current === first || !panel?.contains(current))) {
-        event.preventDefault();
-        last.focus();
-      } else if (!event.shiftKey && (current === last || !panel?.contains(current))) {
-        event.preventDefault();
-        first.focus();
-      }
-    }
-
-    // If the window grows to desktop width, the drawer has no trigger any more, so close it.
-    const desktop = window.matchMedia(DESKTOP_QUERY);
-    const onDesktopChange = () => desktop.matches && setOpen(false);
-
-    document.addEventListener("keydown", onKeyDown);
-    desktop.addEventListener("change", onDesktopChange);
-    return () => {
-      body.style.overflow = previousOverflow;
-      document.removeEventListener("keydown", onKeyDown);
-      desktop.removeEventListener("change", onDesktopChange);
-    };
-  }, [open, closeAndRestoreFocus]);
+  useModalDialog({
+    open,
+    panelRef,
+    initialFocusRef: closeButtonRef,
+    onDismiss: closeAndRestoreFocus,
+    autoCloseQuery: DESKTOP_QUERY,
+    onAutoClose: closeOnNavigate,
+  });
 
   return (
     <div className="lg:hidden">

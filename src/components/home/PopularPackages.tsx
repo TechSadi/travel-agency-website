@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { TripCard } from "@/components/trips/TripCard";
+import { toTripCardData } from "@/data/tripList";
 import { buttonClasses } from "@/components/ui/Button";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { trips } from "@/data/trips";
@@ -24,7 +25,7 @@ export function PopularPackages() {
       />
       <div className={`grid gap-5 md:grid-cols-2 md:gap-7 lg:grid-cols-3 ${mobileSnapRow}`}>
         {popular.map((trip) => (
-          <TripCard key={trip.slug} trip={trip} className={mobileSnapItem} />
+          <TripCard key={trip.slug} trip={toTripCardData(trip)} className={mobileSnapItem} />
         ))}
       </div>
       {/* Phones: the heading link is hidden, so offer the full list under the cards, like "See all departures". */}

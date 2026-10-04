@@ -5,39 +5,53 @@ import Link from "next/link";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { StarRating } from "@/components/ui/StarRating";
+import type { TripCardData } from "@/data/tripList";
 import type { Trip } from "@/data/types";
 import { formatDuration, formatRupees } from "@/lib/format";
 import { inclusionIcons } from "./inclusionIcons";
 import { SaveTripButton } from "./SaveTripButton";
 
 type TripCardProps = {
-  trip: Trip;
+  /** Card fields only; build them with `toTripCardData` from src/data/tripList.ts. */
+  trip: TripCardData;
+  /** "list" is the horizontal variant for the trips list view (stacked again under 640px). */
+  layout?: "grid" | "list";
   /** next/image `sizes`; the default suits a 3-column grid inside the 1280px container. */
   sizes?: string;
   className?: string;
 };
+
+const GRID_SIZES = "(min-width: 1280px) 410px, (min-width: 980px) 33vw, (min-width: 640px) 50vw, 100vw";
+const LIST_SIZES = "(min-width: 1280px) 360px, (min-width: 640px) 38vw, 100vw";
 
 export function tripHref(trip: Pick<Trip, "slug">) {
   return `/trips/${trip.slug}`;
 }
 
 /** Package card: DESIGN.md section 4, design-reference/trips.html. */
-export function TripCard({
-  trip,
-  sizes = "(min-width: 1280px) 410px, (min-width: 980px) 33vw, (min-width: 640px) 50vw, 100vw",
-  className,
-}: TripCardProps) {
+export function TripCard({ trip, layout = "grid", sizes, className }: TripCardProps) {
   const href = tripHref(trip);
-  const imageAlt = trip.gallery.find((image) => image.src === trip.heroImage)?.alt ?? trip.title;
+  const list = layout === "list";
 
   return (
-    <article className={clsx("group flex flex-col overflow-hidden rounded-card border border-line bg-white", className)}>
-      <div className="relative aspect-[4/3] overflow-hidden bg-paper">
+    <article
+      className={clsx(
+        "group flex flex-col overflow-hidden rounded-card border border-line bg-white",
+        list && "sm:flex-row",
+        className,
+      )}
+    >
+      <div
+        className={clsx(
+          "relative aspect-[4/3] overflow-hidden bg-paper",
+          list && "sm:aspect-auto sm:min-h-[248px] sm:w-[38%] sm:shrink-0",
+        )}
+      >
         <Image
           src={trip.heroImage}
-          alt={imageAlt}
+          alt={trip.imageAlt}
           fill
-          sizes={sizes}
+          sizes={sizes ?? (list ? LIST_SIZES : GRID_SIZES)}
           className="object-cover transition-transform duration-500 ease-out motion-safe:group-hover:scale-[1.03]"
         />
         {trip.badge && (
@@ -48,7 +62,7 @@ export function TripCard({
         <SaveTripButton tripTitle={trip.title} className="absolute top-3 right-3" />
       </div>
 
-      <div className="flex flex-1 flex-col gap-2.5 px-5 pt-5 pb-[22px]">
+      <div className={clsx("flex flex-1 flex-col gap-2.5 px-5 pt-5 pb-[22px]", list && "sm:px-6 sm:pt-[22px]")}>
         <div className="flex items-center justify-between gap-2.5 text-[0.92rem] text-muted">
           <span className="inline-flex items-center gap-1.5">
             <MapPin size={15} strokeWidth={1.8} aria-hidden="true" className="shrink-0" />

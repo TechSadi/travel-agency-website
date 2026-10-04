@@ -1,9 +1,10 @@
+import { tripVariants, variantOf } from "./moreTrips";
 import type { Departure, Trip } from "./types";
 
 // Card fields (title, place, price, rating, badge, inclusions, image) follow
 // design-reference/trips.html. Kashmir detail content follows trip-kashmir.html.
 
-export const trips: Trip[] = [
+const coreTrips: Trip[] = [
   {
     slug: "kashmir-paradise-on-earth",
     title: "Kashmir: Paradise on Earth",
@@ -1216,6 +1217,18 @@ export const trips: Trip[] = [
       { date: "2026-12-19", fromCity: "Vadodara", seatsLeft: 4, price: 89999 },
     ],
   },
+];
+
+const coreBySlug = new Map(coreTrips.map((trip) => [trip.slug, trip]));
+
+/** All demo trips: the nine fully written ones, then the variants from moreTrips.ts. */
+export const trips: Trip[] = [
+  ...coreTrips,
+  ...tripVariants.map((variant) => {
+    const base = coreBySlug.get(variant.base);
+    if (!base) throw new Error(`Unknown base trip "${variant.base}" for ${variant.slug}`);
+    return variantOf(base, variant);
+  }),
 ];
 
 export function getTripBySlug(slug: string): Trip | undefined {

@@ -3,8 +3,9 @@
 import clsx from "clsx";
 import { Calendar, Heart, MapPin, Search, Users, type LucideIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useId, useMemo, useState, type ComponentProps, type FormEvent, type KeyboardEvent, type ReactNode } from "react";
+import { useId, useMemo, useState, type FormEvent, type KeyboardEvent, type ReactNode } from "react";
 import { buttonClasses } from "@/components/ui/Button";
+import { fieldClasses, Select } from "@/components/ui/Select";
 import type { TripType } from "@/data/types";
 
 export type SearchDestination = { slug: string; name: string; country: string };
@@ -27,8 +28,7 @@ const tripTypes: { value: TripType; label: string }[] = [
 
 const travellerOptions = [1, 2, 3, 4, 5, 6];
 
-const fieldClasses =
-  "min-h-11 w-full min-w-0 rounded-control border border-line bg-paper px-3 text-[1rem] text-ink placeholder:text-muted focus-visible:border-ink";
+const inputClasses = clsx(fieldClasses, "bg-paper");
 
 function FieldLabel({ icon: Icon, htmlFor, children }: { icon: LucideIcon; htmlFor: string; children: ReactNode }) {
   return (
@@ -36,29 +36,6 @@ function FieldLabel({ icon: Icon, htmlFor, children }: { icon: LucideIcon; htmlF
       <Icon size={16} strokeWidth={1.8} aria-hidden="true" className="shrink-0 text-brand" />
       {children}
     </label>
-  );
-}
-
-/** Custom chevron for the native selects, so they match the text input. */
-function SelectField({ id, children, ...rest }: ComponentProps<"select"> & { id: string }) {
-  return (
-    <div className="relative">
-      <select id={id} {...rest} className={clsx(fieldClasses, "appearance-none pr-9")}>
-        {children}
-      </select>
-      <svg
-        aria-hidden="true"
-        viewBox="0 0 24 24"
-        width="16"
-        height="16"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-muted"
-      >
-        <path d="m6 9 6 6 6-6" />
-      </svg>
-    </div>
   );
 }
 
@@ -166,7 +143,7 @@ export function SearchPanel({ destinations, months, className }: SearchPanelProp
           onFocus={() => setOpen(true)}
           onBlur={() => setOpen(false)}
           onKeyDown={onKeyDown}
-          className={fieldClasses}
+          className={inputClasses}
         />
         <ul
           id={ids.list}
@@ -201,41 +178,41 @@ export function SearchPanel({ destinations, months, className }: SearchPanelProp
         <FieldLabel icon={Heart} htmlFor={ids.type}>
           Kind of trip
         </FieldLabel>
-        <SelectField id={ids.type} value={type} onChange={(event) => setType(event.target.value)}>
+        <Select id={ids.type} value={type} onChange={(event) => setType(event.target.value)}>
           <option value="">Any kind</option>
           {tripTypes.map((option) => (
             <option key={option.value} value={option.value}>
               {option.label}
             </option>
           ))}
-        </SelectField>
+        </Select>
       </div>
 
       <div className="flex min-w-0 flex-col gap-1.5">
         <FieldLabel icon={Calendar} htmlFor={ids.when}>
           When
         </FieldLabel>
-        <SelectField id={ids.when} value={month} onChange={(event) => setMonth(event.target.value)}>
+        <Select id={ids.when} value={month} onChange={(event) => setMonth(event.target.value)}>
           <option value="">Any month</option>
           {months.map((option) => (
             <option key={option.value} value={option.value}>
               {option.label}
             </option>
           ))}
-        </SelectField>
+        </Select>
       </div>
 
       <div className="flex min-w-0 flex-col gap-1.5">
         <FieldLabel icon={Users} htmlFor={ids.adults}>
           Travellers
         </FieldLabel>
-        <SelectField id={ids.adults} value={adults} onChange={(event) => setAdults(event.target.value)}>
+        <Select id={ids.adults} value={adults} onChange={(event) => setAdults(event.target.value)}>
           {travellerOptions.map((count) => (
             <option key={count} value={count}>
               {count === 6 ? "6+ adults" : `${count} ${count === 1 ? "adult" : "adults"}`}
             </option>
           ))}
-        </SelectField>
+        </Select>
       </div>
 
       <button type="submit" className={buttonClasses("primary", "md", "col-span-2 min-h-12 md:col-span-1 md:min-h-[46px]")}>
