@@ -27,7 +27,7 @@ export function ContactCard({ icon, tone, title, value, note, link }: ContactCar
       <span className="text-[0.95rem] text-muted">{note}</span>
       <a
         href={link.href}
-        className="mt-1.5 self-start font-medium text-brand underline underline-offset-4"
+        className="tap-target relative mt-1.5 self-start font-medium text-brand underline underline-offset-4"
         {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
       >
         {link.label}

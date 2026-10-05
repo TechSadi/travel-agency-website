@@ -26,7 +26,7 @@ export function DestinationTile({ destination, size = "default", sizes, classNam
     <Link
       href={destinationHref(destination)}
       className={clsx(
-        "group relative block overflow-hidden rounded-card bg-ink text-white no-underline hover:text-white",
+        "group card-lift relative block overflow-hidden rounded-card bg-ink text-white no-underline hover:text-white",
         small ? "h-[200px] w-[150px] shrink-0" : "min-h-[260px]",
         large && "md:row-span-2",
         className,
@@ -38,7 +38,7 @@ export function DestinationTile({ destination, size = "default", sizes, classNam
         alt=""
         fill
         sizes={sizes ?? "(min-width: 1280px) 310px, (min-width: 768px) 33vw, 100vw"}
-        className="object-cover transition-transform duration-500 ease-out motion-safe:group-hover:scale-[1.03]"
+        className="card-photo object-cover"
       />
       <span aria-hidden="true" className="absolute inset-0 overlay-tile" />
       {small ? (

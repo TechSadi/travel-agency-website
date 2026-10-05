@@ -81,7 +81,7 @@ Keep section headings to about 22 characters wide (`max-width: 22ch`) and paragr
   - Search panel and booking card: `0 24px 48px -24px rgba(22,32,42,.35)`
   - Small floating info card: `0 20px 40px -24px rgba(22,32,42,.4)`
   - Mobile bottom bar: `0 -8px 24px -12px rgba(22,32,42,.25)`
-- Cards use a 1px `line` border, not a shadow.
+- Cards use a 1px `line` border, not a shadow. On hover (pointer devices only), trip cards and destination tiles lift 4px onto `0 22px 40px -26px rgba(22,32,42,.38)`.
 
 ### Icons
 
@@ -270,7 +270,13 @@ Only the Kashmir page has full content in the mockup. Write similar, believable 
   - ensure colour contrast of at least 4.5:1
   - respect `prefers-reduced-motion`
 - **Images:** use `next/image` with explicit `sizes`, add `priority` on the hero, and write meaningful alt text.
-- **Motion:** keep it minimal. Card images may scale to 1.03 on hover; accordions and the mobile menu animate open. No scroll-triggered fade-ins.
+- **Motion:** restrained and CSS-first, with no animation libraries. Animate only transform and opacity (accordion height is the one exception), using the duration tokens and one ease-out curve, `cubic-bezier(0.22, 1, 0.36, 1)`. Always respect `prefers-reduced-motion`.
+  - Hover and press: cards lift 4px onto a soft shadow and their images ease in to 1.05 over 700ms, card borders darken and titles turn brand, buttons press to 0.98, and links without a resting underline get one that slides in from the left. Gallery tiles keep a quieter 1.03 zoom.
+  - Accordions, the mobile menu, the filter sheet and the lightbox animate open and closed. Trip results fade up 12px, 40ms apart, when they change.
+  - Page intros on load: the Home hero (rating pill, h1, lead, buttons), the inner-page title bands and the trip header fade up 24px over 750ms, 120ms apart. The Home and Destinations hero photos settle from 1.1 to 1 over 2.4s. The buttons must stay above the fold and the hero photo must stay the fast LCP element.
+  - Page transitions: the old page lifts 8px and fades out (250ms) while the new one rises 16px into place (450ms), and a trip card photo morphs into the trip detail gallery over 600ms (React view transitions).
+  - Scroll reveals: section headings and card groups only, once. Headings rise out of a mask at their baseline over 900ms, then their text and link fade up; cards fade up 32px over 750ms, 90ms apart, while their photos settle from 1.12 to 1 inside the frame. Never hide content without JS and never animate anything visible on load. No reveals on trip detail sections, forms, the booking card, tables or sticky elements.
+  - About stats count up once; the active nav underline and the trip detail tab indicator slide between items.
 - **Avoid these:**
   - all-caps eyebrow labels above headings
   - "→" in link text

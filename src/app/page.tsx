@@ -9,10 +9,11 @@ import { ReviewsSection } from "@/components/home/ReviewsSection";
 import { SearchPanel } from "@/components/home/SearchPanel";
 import { TravelThemes } from "@/components/home/TravelThemes";
 import { TrustRow } from "@/components/home/TrustRow";
+import { PageMain } from "@/components/layout/PageMain";
 import { Container } from "@/components/ui/Container";
 import { destinations } from "@/data/destinations";
-import { site } from "@/data/site";
 import { getUpcomingDepartures } from "@/data/trips";
+import { pageMetadata } from "@/lib/seo";
 
 // Rebuild daily so "upcoming" departures roll forward.
 export const revalidate = 86400;
@@ -20,15 +21,7 @@ export const revalidate = 86400;
 const description =
   "Family holidays, honeymoons and group tours across India and abroad. Flights, visas, hotels and sightseeing, arranged by one team in Fatehgunj, Vadodara.";
 
-export const metadata: Metadata = {
-  title: { absolute: `${site.name} | ${site.tagline}` },
-  description,
-  openGraph: {
-    title: `${site.name} | Holidays planned in Vadodara, remembered everywhere`,
-    description,
-    images: [{ url: "/images/hero.jpg", alt: "Snow-covered Himalayan peaks under a clear sky" }],
-  },
-};
+export const metadata: Metadata = pageMetadata({ description, path: "/" });
 
 const monthLabel = new Intl.DateTimeFormat("en-US", { month: "long", year: "numeric", timeZone: "UTC" });
 
@@ -42,7 +35,7 @@ export default function HomePage() {
   const searchDestinations = destinations.map(({ slug, name, country }) => ({ slug, name, country }));
 
   return (
-    <main>
+    <PageMain>
       <HomeHero />
       <Container className="relative z-10 -mt-16 md:-mt-[84px]">
         <SearchPanel destinations={searchDestinations} months={departureMonths()} />
@@ -55,6 +48,6 @@ export default function HomePage() {
       <OfficeFeatures />
       <ReviewsSection />
       <CtaBand />
-    </main>
+    </PageMain>
   );
 }

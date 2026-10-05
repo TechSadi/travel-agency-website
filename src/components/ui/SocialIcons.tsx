@@ -43,12 +43,3 @@ export function InstagramIcon(props: IconProps) {
     </StrokeIcon>
   );
 }
-
-export function YouTubeIcon(props: IconProps) {
-  return (
-    <StrokeIcon {...props}>
-      <rect x="2.5" y="5.5" width="19" height="13" rx="4" />
-      <path d="M10 9.5v5l4.5-2.5z" />
-    </StrokeIcon>
-  );
-}

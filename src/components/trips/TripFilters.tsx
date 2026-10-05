@@ -22,7 +22,8 @@ const groups: { key: FilterGroup; legend: string }[] = [
 function Fieldset({ legend, children }: { legend: string; children: ReactNode }) {
   return (
     <fieldset className="border-t border-line py-[22px]">
-      <legend className="mb-3 pr-3 font-semibold text-ink">{legend}</legend>
+      {/* Small gap: the 44px option rows already add space above the first option. */}
+      <legend className="mb-1 pr-3 font-semibold text-ink">{legend}</legend>
       {children}
     </fieldset>
   );
@@ -39,12 +40,12 @@ export function TripFilters({ state, options, counts, onChange, idPrefix }: Trip
   function checkboxes(group: FilterGroup) {
     const selected = state[group] as string[];
     return (
-      <ul className="flex flex-col gap-2.5">
+      <ul className="flex flex-col">
         {options[group].map((option) => {
           const id = `${idPrefix}-${group}-${option.value}`;
           return (
             <li key={option.value}>
-              <label htmlFor={id} className="flex cursor-pointer items-center justify-between gap-2.5 text-body">
+              <label htmlFor={id} className="flex min-h-11 cursor-pointer items-center justify-between gap-2.5 text-body">
                 <span className="inline-flex items-center gap-2.5">
                   <input
                     id={id}
@@ -76,7 +77,7 @@ export function TripFilters({ state, options, counts, onChange, idPrefix }: Trip
       ))}
 
       <Fieldset legend="Budget per person">
-        <div className="pt-0.5">
+        <div className="pt-2.5">
           <BudgetRange
             idPrefix={`${idPrefix}-budget`}
             min={options.budget.min}

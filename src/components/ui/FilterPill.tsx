@@ -13,7 +13,7 @@ export function FilterPill({ selected, className, ...rest }: FilterPillProps) {
       type="button"
       aria-pressed={selected}
       className={clsx(
-        "min-h-[42px] cursor-pointer rounded-pill border px-[18px] text-[0.95rem] whitespace-nowrap transition-colors",
+        "min-h-11 cursor-pointer rounded-pill border px-[18px] text-[0.95rem] whitespace-nowrap transition-colors",
         selected ? "border-ink bg-ink text-white" : "border-line bg-white text-ink hover:border-ink",
         className,
       )}

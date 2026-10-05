@@ -2,7 +2,8 @@
 
 import clsx from "clsx";
 import { Clock, Menu, Phone, X } from "lucide-react";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useRef, useState, useSyncExternalStore } from "react";
+import { createPortal } from "react-dom";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { WhatsAppIcon } from "@/components/ui/WhatsAppIcon";
@@ -17,12 +18,16 @@ const DESKTOP_QUERY = "(min-width: 980px)";
 const iconButton =
   "inline-flex size-12 shrink-0 items-center justify-center rounded-control border border-line bg-white text-ink transition-colors hover:border-ink";
 
+const noopSubscribe = () => () => {};
+
 /** Menu button plus the slide-down drawer shown under 980px. */
 export function MobileMenu() {
   const [open, setOpen] = useState(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
+  // The drawer is portalled into <body>, which only exists on the client.
+  const mounted = useSyncExternalStore(noopSubscribe, () => true, () => false);
 
   // Closing from inside the drawer (Escape, close button, backdrop) returns focus to the menu button.
   const closeAndRestoreFocus = useCallback(() => {
@@ -42,25 +47,13 @@ export function MobileMenu() {
     onAutoClose: closeOnNavigate,
   });
 
-  return (
-    <div className="lg:hidden">
-      <button
-        ref={menuButtonRef}
-        type="button"
-        aria-label="Open menu"
-        aria-expanded={open}
-        aria-controls="mobile-menu"
-        onClick={() => setOpen(true)}
-        className={iconButton}
-      >
-        <Menu size={22} strokeWidth={1.8} aria-hidden="true" />
-      </button>
-
+  const drawer = (
+    <>
       <div
         aria-hidden="true"
         onClick={closeAndRestoreFocus}
         className={clsx(
-          "fixed inset-0 z-40 bg-ink/55 transition-opacity duration-300",
+          "fixed inset-0 z-40 bg-ink/55 transition-opacity duration-(--duration-base) ease-out lg:hidden",
           open ? "opacity-100" : "pointer-events-none opacity-0",
         )}
       />
@@ -73,9 +66,9 @@ export function MobileMenu() {
         aria-label="Menu"
         inert={!open}
         className={clsx(
-          "fixed inset-x-0 top-0 z-50 max-h-dvh overflow-y-auto border-b border-line bg-white shadow-panel",
+          "fixed inset-x-0 top-0 z-50 max-h-dvh overflow-y-auto border-b border-line bg-white shadow-panel lg:hidden",
           // Visibility flips at once on open (so focus can move in) and only after the slide on close.
-          "duration-300 ease-out",
+          "duration-(--duration-base) ease-out",
           open ? "visible translate-y-0 transition-[translate]" : "invisible -translate-y-full transition-[translate,visibility]",
         )}
       >
@@ -115,7 +108,7 @@ export function MobileMenu() {
 
           <ul className="mt-6 flex flex-col gap-2 text-[0.95rem] text-muted">
             <li>
-              <a href={site.phone.href} className="inline-flex items-center gap-2.5 text-ink no-underline">
+              <a href={site.phone.href} className="inline-flex min-h-11 items-center gap-2.5 text-ink no-underline">
                 <Phone size={16} strokeWidth={1.8} aria-hidden="true" className="text-brand" />
                 {site.phone.display}
               </a>
@@ -127,6 +120,28 @@ export function MobileMenu() {
           </ul>
         </Container>
       </div>
+    </>
+  );
+
+  return (
+    <div className="lg:hidden">
+      <button
+        ref={menuButtonRef}
+        type="button"
+        aria-label="Open menu"
+        aria-expanded={open}
+        aria-controls="mobile-menu"
+        onClick={() => setOpen(true)}
+        className={iconButton}
+      >
+        <Menu size={22} strokeWidth={1.8} aria-hidden="true" />
+      </button>
+
+      {/*
+        Portalled out of the header: its view-transition-name makes it a stacking context,
+        which would trap these z-indexes under the page content painted after it.
+      */}
+      {mounted && createPortal(drawer, document.body)}
     </div>
   );
 }

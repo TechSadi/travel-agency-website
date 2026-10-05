@@ -13,7 +13,7 @@ export function ExpertCard({ place }: { place: string }) {
       </span>
       <p className="flex flex-col leading-[1.35]">
         <span className="font-semibold">Talk to our {place} expert</span>
-        <a href={site.phone.href} className="text-ink underline underline-offset-4">
+        <a href={site.phone.href} className="tap-target relative text-ink underline underline-offset-4">
           {site.phone.display}
         </a>
       </p>

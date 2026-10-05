@@ -28,20 +28,21 @@ export function FactsStrip({ trip }: { trip: Trip }) {
       )}
     >
       {factsOf(trip).map(({ label, value, icon: Icon }) => (
+        // A <dl> group may only hold <dt> and <dd>, so the icon sits inside the <dt>, absolutely placed in the left padding.
         <div
           key={label}
-          className="flex gap-3 rounded-control bg-paper p-3 last:odd:col-span-2 md:items-start md:bg-transparent md:p-0 md:last:odd:col-span-1"
+          className="relative flex flex-col rounded-control bg-paper p-3 leading-[1.3] last:odd:col-span-2 md:min-h-11 md:bg-transparent md:p-0 md:pl-14 md:last:odd:col-span-1"
         >
-          <span
-            aria-hidden="true"
-            className="hidden size-11 shrink-0 items-center justify-center rounded-control bg-brand-tint text-brand md:inline-flex"
-          >
-            <Icon size={20} strokeWidth={1.8} />
-          </span>
-          <div className="flex flex-col leading-[1.3]">
-            <dt className="text-[0.8rem] text-muted md:text-[0.88rem]">{label}</dt>
-            <dd className="text-[0.95rem] font-medium md:text-copy">{value}</dd>
-          </div>
+          <dt className="text-[0.85rem] text-muted md:text-[0.88rem]">
+            <span
+              aria-hidden="true"
+              className="absolute top-0 left-0 hidden size-11 items-center justify-center rounded-control bg-brand-tint text-brand md:inline-flex"
+            >
+              <Icon size={20} strokeWidth={1.8} />
+            </span>
+            {label}
+          </dt>
+          <dd className="text-[0.95rem] font-medium md:text-copy">{value}</dd>
         </div>
       ))}
     </dl>

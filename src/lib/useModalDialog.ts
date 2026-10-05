@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, type RefObject } from "react";
 
-const FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
+const FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
 type ModalDialogOptions = {
   open: boolean;
@@ -37,7 +37,9 @@ export function useModalDialog({ open, panelRef, initialFocusRef, onDismiss, aut
     const previousOverflow = body.style.overflow;
     body.style.overflow = "hidden";
 
-    const focusables = () => Array.from(panel.querySelectorAll<HTMLElement>(FOCUSABLE));
+    // Only rendered elements: a panel can hold controls hidden at this breakpoint (the Lightbox arrows).
+    const focusables = () =>
+      Array.from(panel.querySelectorAll<HTMLElement>(FOCUSABLE)).filter((element) => element.getClientRects().length > 0);
     (initialFocusRef?.current ?? focusables()[0])?.focus();
 
     function onKeyDown(event: KeyboardEvent) {

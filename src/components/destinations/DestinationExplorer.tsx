@@ -60,7 +60,7 @@ export function DestinationExplorer({ destinations, regions }: DestinationExplor
             onChange={(event) => setQuery(event.target.value)}
             placeholder="Search destinations"
             autoComplete="off"
-            className="min-w-0 flex-1 bg-transparent text-[1rem] text-ink outline-none placeholder:text-muted"
+            className="min-w-0 flex-1 self-stretch bg-transparent text-[1rem] text-ink outline-none placeholder:text-muted"
           />
         </div>
       </div>
@@ -70,7 +70,7 @@ export function DestinationExplorer({ destinations, regions }: DestinationExplor
       </p>
 
       {results.length > 0 ? (
-        <ul className="grid grid-cols-[repeat(auto-fill,minmax(min(100%,300px),1fr))] gap-x-7 gap-y-10">
+        <ul data-reveal="group" className="grid grid-cols-[repeat(auto-fill,minmax(min(100%,300px),1fr))] gap-x-7 gap-y-10">
           {results.map((destination) => (
             <li key={destination.slug}>
               <DestinationCard destination={destination} />

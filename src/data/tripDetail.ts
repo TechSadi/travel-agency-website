@@ -16,7 +16,7 @@ export function getTripReviews(trip: Trip, limit = 2): Review[] {
   const sameDestination = new Set(
     trips.filter((other) => other.destinationSlug === trip.destinationSlug).map((other) => other.slug),
   );
-  return reviews.filter((review) => sameDestination.has(review.tripSlug)).slice(0, limit);
+  return reviews.filter((review) => review.tripSlug && sameDestination.has(review.tripSlug)).slice(0, limit);
 }
 
 /**

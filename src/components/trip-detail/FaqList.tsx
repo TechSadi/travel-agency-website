@@ -41,7 +41,7 @@ export function FaqList({ id, faqs }: FaqListProps) {
                   size={20}
                   strokeWidth={1.8}
                   aria-hidden="true"
-                  className={clsx("shrink-0 transition-transform duration-300", isOpen && "rotate-180")}
+                  className={clsx("shrink-0 transition-transform duration-(--duration-base) ease-out", isOpen && "rotate-180")}
                 />
               </button>
             </h3>

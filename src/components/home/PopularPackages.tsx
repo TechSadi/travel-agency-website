@@ -23,7 +23,7 @@ export function PopularPackages() {
         link={{ href: "/trips", label: viewAll }}
         linkClassName="max-md:hidden"
       />
-      <div className={`grid gap-5 md:grid-cols-2 md:gap-7 lg:grid-cols-3 ${mobileSnapRow}`}>
+      <div data-reveal="group" className={`grid gap-5 md:grid-cols-2 md:gap-7 lg:grid-cols-3 ${mobileSnapRow}`}>
         {popular.map((trip) => (
           <TripCard key={trip.slug} trip={toTripCardData(trip)} className={mobileSnapItem} />
         ))}

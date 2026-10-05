@@ -2,6 +2,7 @@
 
 import clsx from "clsx";
 import { useEffect, useRef, useState, type MouseEvent } from "react";
+import { SlidingIndicator, useSlidingIndicator } from "@/components/ui/SlidingIndicator";
 
 export type SectionTab = { id: string; label: string };
 
@@ -22,6 +23,8 @@ export function SectionTabs({ tabs, className }: SectionTabsProps) {
   // While a click-triggered smooth scroll runs, ignore the sections it passes on the way.
   const scrollTarget = useRef<string | null>(null);
   const unlockTimer = useRef<number | undefined>(undefined);
+  // One bar slides to the current tab; until it is measured, the current tab draws its own border.
+  const indicator = useSlidingIndicator(listRef, active);
 
   useEffect(() => {
     const sections = tabs
@@ -72,7 +75,8 @@ export function SectionTabs({ tabs, className }: SectionTabsProps) {
     const link = list?.querySelector<HTMLElement>(`a[href="#${active}"]`);
     if (!list || !link || list.scrollWidth <= list.clientWidth) return;
     const left = link.offsetLeft - (list.clientWidth - link.offsetWidth) / 2;
-    list.scrollTo({ left, behavior: "smooth" });
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    list.scrollTo({ left, behavior: reduceMotion ? "auto" : "smooth" });
   }, [active]);
 
   function onClick(event: MouseEvent<HTMLAnchorElement>, id: string) {
@@ -101,7 +105,7 @@ export function SectionTabs({ tabs, className }: SectionTabsProps) {
         ref={listRef}
         // The divider is an inset shadow, so the active link's 2px underline can cover it
         // without overflowing the sideways-scrolling row.
-        className="scrollbar-none flex gap-[22px] overflow-x-auto shadow-[inset_0_-1px_0_var(--color-line)] max-md:px-[var(--gutter)] md:gap-7"
+        className="scrollbar-none relative flex gap-[22px] overflow-x-auto shadow-[inset_0_-1px_0_var(--color-line)] max-md:px-[var(--gutter)] md:gap-7"
       >
         {tabs.map((tab) => {
           const current = tab.id === active;
@@ -112,9 +116,9 @@ export function SectionTabs({ tabs, className }: SectionTabsProps) {
                 aria-current={current ? "true" : undefined}
                 onClick={(event) => onClick(event, tab.id)}
                 className={clsx(
-                  "block border-b-2 py-3 whitespace-nowrap no-underline transition-colors md:py-3.5",
+                  "block min-w-11 border-b-2 py-3 text-center whitespace-nowrap no-underline transition-colors md:py-3.5",
                   current
-                    ? "border-brand font-semibold text-brand hover:text-brand"
+                    ? clsx("font-semibold text-brand hover:text-brand", indicator ? "border-transparent" : "border-brand")
                     : "border-transparent font-medium text-ink hover:text-brand-dark",
                 )}
               >
@@ -123,6 +127,7 @@ export function SectionTabs({ tabs, className }: SectionTabsProps) {
             </li>
           );
         })}
+        <SlidingIndicator box={indicator} />
       </ul>
     </nav>
   );

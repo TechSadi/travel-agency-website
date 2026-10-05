@@ -2,6 +2,7 @@ import { Check } from "lucide-react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { mobileSnapItem, mobileSnapRow, mobileTitle } from "@/components/home/HomeSection";
+import { PageMain } from "@/components/layout/PageMain";
 import { ReviewCard } from "@/components/reviews/ReviewCard";
 import { BookingCard } from "@/components/trip-detail/BookingCard";
 import { DetailSection } from "@/components/trip-detail/DetailSection";
@@ -22,6 +23,7 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { toTripCardData } from "@/data/tripList";
 import { getRelatedTrips, getTripReviews, metaDescription, shortPlaceOf } from "@/data/tripDetail";
 import { getTripBySlug, trips } from "@/data/trips";
+import { pageMetadata } from "@/lib/seo";
 
 // Every trip is generated at build time; any other slug is a 404.
 export const dynamicParams = false;
@@ -35,17 +37,7 @@ export async function generateMetadata({ params }: PageProps<"/trips/[slug]">): 
   const trip = getTripBySlug(slug);
   if (!trip) return {};
 
-  const description = metaDescription(trip.overview);
-  const image = trip.gallery[0] ?? { src: trip.heroImage, alt: trip.title };
-  return {
-    title: trip.title,
-    description,
-    openGraph: {
-      title: `${trip.title} | Suman Holidays`,
-      description,
-      images: [{ url: image.src, alt: image.alt }],
-    },
-  };
+  return pageMetadata({ title: trip.title, description: metaDescription(trip.overview), path: `/trips/${trip.slug}` });
 }
 
 export default async function TripPage({ params }: PageProps<"/trips/[slug]">) {
@@ -67,15 +59,15 @@ export default async function TripPage({ params }: PageProps<"/trips/[slug]">) {
   ];
 
   return (
-    <main>
+    <PageMain>
       <div className="md:hidden">
-        <TripGallery images={trip.gallery} title={trip.title} layout="carousel" />
+        <TripGallery slug={trip.slug} images={trip.gallery} title={trip.title} layout="carousel" />
       </div>
 
       <Container className="pt-5 md:pt-8">
         <TripHeader trip={trip} crumb={place} hasReviews={tripReviews.length > 0} />
         <div className="mt-[26px] hidden md:block">
-          <TripGallery images={trip.gallery} title={trip.title} layout="grid" />
+          <TripGallery slug={trip.slug} images={trip.gallery} title={trip.title} layout="grid" />
         </div>
       </Container>
 
@@ -131,7 +123,7 @@ export default async function TripPage({ params }: PageProps<"/trips/[slug]">) {
         <section aria-labelledby="related-title" className="bg-paper">
           <Container className="py-11 md:py-[clamp(72px,9vw,120px)]">
             <SectionHeading id="related-title" title="You might also like" titleClassName={mobileTitle} className="mb-6 md:mb-8" />
-            <div className={`${mobileSnapRow} md:grid md:grid-cols-2 md:gap-6 lg:grid-cols-3 lg:gap-7 md:max-lg:[&>*:nth-child(3)]:hidden`}>
+            <div data-reveal="group" className={`${mobileSnapRow} md:grid md:grid-cols-2 md:gap-6 lg:grid-cols-3 lg:gap-7 md:max-lg:[&>*:nth-child(3)]:hidden`}>
               {related.map((other) => (
                 <TripCard key={other.slug} trip={toTripCardData(other)} className={mobileSnapItem} />
               ))}
@@ -141,6 +133,6 @@ export default async function TripPage({ params }: PageProps<"/trips/[slug]">) {
       )}
 
       <TripActionBar title={trip.title} priceFrom={trip.priceFrom} />
-    </main>
+    </PageMain>
   );
 }

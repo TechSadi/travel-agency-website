@@ -110,14 +110,15 @@ export type DestinationSummary = Destination & {
   priceFrom: number | null;
 };
 
+/** A Google review of the agency. */
 export type Review = {
   name: string;
-  city: string;
-  tripSlug: string;
   rating: number;
   quote: string;
-  /** Extension: overrides the trip title in the caption, e.g. "Kashmir group tour". */
-  tripLabel?: string;
+  /** What the review was about, shown in the caption, e.g. "Thailand group tour". */
+  topic?: string;
+  /** Trip the review belongs to, if any; shown on that trip's detail page. */
+  tripSlug?: string;
 };
 
 /** A "Travel the way you like" tile on Home. Links to the trips list filtered by `type`. */
@@ -130,4 +131,9 @@ export type Theme = {
 
 export type TeamMember = { name: string; role: string; initials: string };
 
-export type Stat = { value: string; label: string };
+export type Stat = {
+  value: string;
+  label: string;
+  /** Counts up on the About page when scrolled to (default true). A year should not. */
+  countUp?: boolean;
+};

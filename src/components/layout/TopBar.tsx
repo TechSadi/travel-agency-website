@@ -7,12 +7,13 @@ function Item({ icon: Icon, href, children }: { icon: LucideIcon; href?: string;
   const content = (
     <>
       <Icon size={15} strokeWidth={1.8} aria-hidden="true" className="shrink-0" />
-      {children}
+      {/* The hover underline sits under the text only, not the icon. */}
+      {href ? <span className="link-slide relative">{children}</span> : children}
     </>
   );
   const classes = "inline-flex items-center gap-2";
   return href ? (
-    <a href={href} className={`${classes} text-topbar-text no-underline hover:text-white`}>
+    <a href={href} className={`${classes} tap-target relative text-topbar-text no-underline hover:text-white`}>
       {content}
     </a>
   ) : (

@@ -2,7 +2,7 @@
 
 import clsx from "clsx";
 import { useSearchParams } from "next/navigation";
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { WhatsAppIcon } from "@/components/ui/WhatsAppIcon";
 import { whatsappLink } from "@/data/site";
@@ -20,6 +20,7 @@ import {
   type TripListState,
 } from "@/data/tripList";
 import { formatRupees } from "@/lib/format";
+import { durationToken, easeOutToken, prefersReducedMotion } from "@/lib/motion";
 import { EmptyState } from "./EmptyState";
 import { FilterSheet } from "./FilterSheet";
 import { Pagination } from "./Pagination";
@@ -34,9 +35,11 @@ type TripsExplorerProps = {
 
 const SHEET_ID = "trip-filters-sheet";
 
-function prefersReducedMotion() {
-  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-}
+// Card image widths beside the filter sidebar (from 768px): one column up to about 900px, then two or three.
+const RESULT_SIZES = {
+  grid: "(min-width: 1280px) 310px, (min-width: 980px) 31vw, (min-width: 768px) 55vw, (min-width: 600px) 50vw, 100vw",
+  list: "(min-width: 1280px) 370px, (min-width: 768px) 30vw, (min-width: 640px) 38vw, 100vw",
+};
 
 /**
  * The filterable trips list (DESIGN.md section 5, Trips). The URL is the only source of
@@ -60,6 +63,31 @@ export function TripsExplorer({ trips, options }: TripsExplorerProps) {
   const pageItems = results.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   const resultsRef = useRef<HTMLElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
+
+  // When the visible results change (not on the first render), the cards fade up 12px,
+  // 40ms apart. A keyed <ViewTransition> would crossfade, but it would start a view
+  // transition on every step of a budget slider drag.
+  const resultsKey = `${state.view}|${page}|${pageItems.map((trip) => trip.slug).join()}`;
+  const previousKey = useRef(resultsKey);
+  useEffect(() => {
+    if (previousKey.current === resultsKey) return;
+    previousKey.current = resultsKey;
+    const list = listRef.current;
+    if (!list || prefersReducedMotion()) return;
+    const cards = list.querySelectorAll<HTMLElement>(":scope > ul > li");
+    const targets = cards.length > 0 ? Array.from(cards) : [list];
+    const duration = durationToken("--duration-slow");
+    const easing = easeOutToken();
+    targets.forEach((target, index) =>
+      target.animate([{ opacity: 0, translate: "0 12px" }, { opacity: 1, translate: "0 0" }], {
+        duration,
+        easing,
+        delay: Math.min(index, 8) * 40,
+        fill: "backwards",
+      }),
+    );
+  }, [resultsKey]);
   const filtersButtonRef = useRef<HTMLButtonElement>(null);
   const [sheetOpen, setSheetOpen] = useState(false);
 
@@ -117,7 +145,7 @@ export function TripsExplorer({ trips, options }: TripsExplorerProps) {
               <button
                 type="button"
                 onClick={clearAll}
-                className="text-[0.95rem] text-brand underline underline-offset-2 hover:text-brand-dark"
+                className="min-h-11 text-[0.95rem] text-brand underline underline-offset-2 hover:text-brand-dark"
               >
                 Clear all
               </button>
@@ -142,7 +170,11 @@ export function TripsExplorer({ trips, options }: TripsExplorerProps) {
           </div>
         </aside>
 
-        <section ref={resultsRef} aria-label="Trips" className="min-w-0 flex-1 scroll-mt-6">
+        <section ref={resultsRef} aria-labelledby="trip-results" className="min-w-0 flex-1 scroll-mt-6">
+          {/* Keeps the heading order (h1, h2, then the cards' h3) where the sidebar's h2 is hidden. */}
+          <h2 id="trip-results" className="sr-only">
+            Trips
+          </h2>
           <ResultsBar
             total={results.length}
             chips={chips}
@@ -158,7 +190,7 @@ export function TripsExplorer({ trips, options }: TripsExplorerProps) {
             filtersButtonRef={filtersButtonRef}
           />
 
-          <div className="mt-7">
+          <div ref={listRef} className="mt-7">
             {results.length === 0 ? (
               <EmptyState onClear={clearAll} whatsappHref={whatsappLink(whatsappMessage)} />
             ) : (
@@ -169,9 +201,15 @@ export function TripsExplorer({ trips, options }: TripsExplorerProps) {
                   state.view === "grid" ? "grid-cols-[repeat(auto-fill,minmax(min(100%,280px),1fr))]" : "grid-cols-1",
                 )}
               >
-                {pageItems.map((trip) => (
+                {pageItems.map((trip, index) => (
                   <li key={trip.slug} className="flex">
-                    <TripCard trip={trip} layout={state.view} className="w-full" />
+                    <TripCard
+                      trip={trip}
+                      layout={state.view}
+                      sizes={RESULT_SIZES[state.view]}
+                      priority={index === 0}
+                      className="w-full"
+                    />
                   </li>
                 ))}
               </ul>

@@ -41,7 +41,7 @@ export function FilterSheet({ id, open, onDismiss, onAutoClose, onShowResults, o
         aria-hidden="true"
         onClick={onDismiss}
         className={clsx(
-          "fixed inset-0 z-40 bg-ink/55 transition-opacity duration-300",
+          "fixed inset-0 z-40 bg-ink/55 transition-opacity duration-(--duration-base) ease-out",
           open ? "opacity-100" : "pointer-events-none opacity-0",
         )}
       />
@@ -55,7 +55,7 @@ export function FilterSheet({ id, open, onDismiss, onAutoClose, onShowResults, o
         className={clsx(
           "fixed inset-x-0 bottom-0 z-50 flex max-h-[85dvh] flex-col rounded-t-panel bg-white shadow-bar",
           // Visibility flips at once on open (so focus can move in) and only after the slide on close.
-          "duration-300 ease-out",
+          "duration-(--duration-base) ease-out",
           open ? "visible translate-y-0 transition-[translate]" : "invisible translate-y-full transition-[translate,visibility]",
         )}
       >

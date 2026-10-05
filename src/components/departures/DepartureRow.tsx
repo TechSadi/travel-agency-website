@@ -38,7 +38,7 @@ export function DepartureRow({ departure }: DepartureRowProps) {
       <div className="relative flex gap-3.5 py-4 md:hidden">
         <div className="flex h-16 w-[60px] shrink-0 flex-col items-center justify-center rounded-control bg-paper leading-none">
           <span className="font-serif text-[1.6rem]">{date.day}</span>
-          <span className="mt-1 text-[0.8rem] text-muted">{date.month}</span>
+          <span className="mt-1 text-[0.85rem] text-muted">{date.month}</span>
         </div>
         <div className="flex min-w-0 flex-1 flex-col gap-0.5">
           <Link

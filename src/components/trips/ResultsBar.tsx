@@ -55,7 +55,7 @@ export function ResultsBar({
             type="button"
             onClick={() => onRemoveChip(chip)}
             aria-label={`Remove filter: ${chip.label}`}
-            className="inline-flex min-h-9 items-center gap-2 rounded-pill bg-brand-tint pr-2.5 pl-3.5 text-[0.92rem] text-brand-dark transition-colors hover:bg-brand-tint/70"
+            className="inline-flex min-h-11 items-center gap-2 rounded-pill bg-brand-tint pr-2.5 pl-3.5 text-[0.92rem] text-brand-dark transition-colors hover:bg-brand-tint/70"
           >
             {chip.label}
             <X size={16} strokeWidth={1.8} aria-hidden="true" />
@@ -65,7 +65,7 @@ export function ResultsBar({
           <button
             type="button"
             onClick={onClearAll}
-            className="min-h-9 px-1 text-[0.95rem] text-brand-dark underline underline-offset-2 md:hidden"
+            className="min-h-11 px-1 text-[0.95rem] text-brand-dark underline underline-offset-2 md:hidden"
           >
             Clear all
           </button>
@@ -118,7 +118,7 @@ export function ResultsBar({
               aria-pressed={view === value}
               onClick={() => onView(value)}
               className={clsx(
-                "inline-flex h-[42px] w-11 items-center justify-center transition-colors",
+                "inline-flex size-11 items-center justify-center transition-colors",
                 view === value ? "bg-ink text-white" : "bg-white text-ink hover:bg-paper",
               )}
             >

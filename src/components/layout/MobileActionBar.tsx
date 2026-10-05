@@ -16,7 +16,7 @@ export function MobileActionBar() {
     <nav
       aria-label="Quick contact"
       data-global-action-bar
-      className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-[1fr_1fr_1.3fr] gap-2 border-t border-line bg-white px-3 pt-2.5 pb-[calc(14px+env(safe-area-inset-bottom))] shadow-bar md:hidden"
+      className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-[1.15fr_0.85fr_1.3fr] gap-2 border-t border-line bg-white px-3 pt-2.5 pb-[calc(14px+env(safe-area-inset-bottom))] shadow-bar md:hidden"
     >
       <a
         href={site.whatsapp.href}

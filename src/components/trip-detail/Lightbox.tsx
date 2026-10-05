@@ -1,5 +1,6 @@
 "use client";
 
+import clsx from "clsx";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useRef, useState, type PointerEvent } from "react";
@@ -25,6 +26,9 @@ const navButton =
  */
 export function Lightbox({ images, title, startIndex, onClose }: LightboxProps) {
   const [index, setIndex] = useState(startIndex);
+  // Closing plays the fade-out first; onClose (which unmounts this) runs when it ends.
+  const [closing, setClosing] = useState(false);
+  const close = () => setClosing(true);
   const panelRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const swipeStart = useRef<{ x: number; y: number } | null>(null);
@@ -48,7 +52,7 @@ export function Lightbox({ images, title, startIndex, onClose }: LightboxProps) 
   }, []);
 
   // After the effect above, so it records the opener before focus moves into the dialog.
-  useModalDialog({ open: true, panelRef, initialFocusRef: closeRef, onDismiss: onClose });
+  useModalDialog({ open: true, panelRef, initialFocusRef: closeRef, onDismiss: close });
 
   function onPointerDown(event: PointerEvent) {
     swipeStart.current = { x: event.clientX, y: event.clientY };
@@ -71,14 +75,22 @@ export function Lightbox({ images, title, startIndex, onClose }: LightboxProps) 
       role="dialog"
       aria-modal="true"
       aria-label={`${title} photos`}
-      className="fixed inset-0 z-50 flex flex-col bg-ink text-white"
+      onAnimationEnd={(event) => {
+        if (closing && event.target === event.currentTarget) onClose();
+      }}
+      className={clsx(
+        "fixed inset-0 z-50 flex flex-col bg-ink text-white",
+        closing
+          ? "animate-[fade-out_var(--duration-fast)_var(--ease-out)_both]"
+          : "animate-[fade-in_var(--duration-base)_var(--ease-out)_both]",
+      )}
     >
       <div className="flex items-center justify-between gap-4 px-4 py-3 md:px-6">
         <p aria-live="polite" className="text-[0.95rem] text-photo-text">
           <span className="sr-only">Photo </span>
           {index + 1} / {count}
         </p>
-        <button ref={closeRef} type="button" aria-label="Close photos" onClick={onClose} className={navButton}>
+        <button ref={closeRef} type="button" aria-label="Close photos" onClick={close} className={navButton}>
           <X size={22} strokeWidth={1.8} aria-hidden="true" />
         </button>
       </div>
@@ -102,7 +114,7 @@ export function Lightbox({ images, title, startIndex, onClose }: LightboxProps) 
               fill
               sizes="(min-width: 768px) calc(100vw - 160px), 100vw"
               draggable={false}
-              className="object-contain"
+              className="object-contain motion-safe:animate-[photo-in_var(--duration-base)_var(--ease-out)_both]"
             />
           </div>
           <figcaption className="pt-3 text-center text-[0.95rem] text-photo-text">{image.alt}</figcaption>

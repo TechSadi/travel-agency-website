@@ -6,10 +6,14 @@ import { site } from "@/data/site";
 import { Logo } from "./Logo";
 import { MobileMenu } from "./MobileMenu";
 import { NavLinks } from "./NavLinks";
+import { TopBar } from "./TopBar";
 
 export function Header() {
   return (
-    <header className="border-b border-line bg-white">
+    // The desktop contact strip sits inside the banner landmark, so no page content is outside a landmark.
+    // Named for view transitions so it stays still while the page below crossfades (globals.css).
+    <header className="border-b border-line bg-white" style={{ viewTransitionName: "site-header" }}>
+      <TopBar />
       <Container className="flex items-center justify-between gap-6 py-3.5">
         <Logo />
 

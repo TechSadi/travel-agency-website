@@ -2,6 +2,7 @@ import clsx from "clsx";
 import { Clock, MapPin } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { ViewTransition, type ReactNode } from "react";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { StarRating } from "@/components/ui/StarRating";
@@ -18,6 +19,8 @@ type TripCardProps = {
   layout?: "grid" | "list";
   /** next/image `sizes`; the default suits a 3-column grid inside the 1280px container. */
   sizes?: string;
+  /** Load the photo eagerly at high priority, for the first card above the fold (the LCP element). */
+  priority?: boolean;
   className?: string;
 };
 
@@ -28,15 +31,31 @@ export function tripHref(trip: Pick<Trip, "slug">) {
   return `/trips/${trip.slug}`;
 }
 
+/**
+ * View transition name shared by a trip's card photo and the first photo of its gallery, so the
+ * photo morphs into place on the way to the trip page (the `trip-photo` rules in globals.css).
+ * `default="none"` stops it animating in unrelated transitions; the pair still morphs via `share`.
+ * Only one mounted element may hold a name: `inactive` swaps in a unique, unpaired one instead
+ * (changing the name, not the tree, so the photo is not remounted).
+ */
+export function TripPhotoTransition({ slug, inactive, children }: { slug: string; inactive?: string; children: ReactNode }) {
+  const name = inactive ? `trip-photo-${slug}-${inactive}` : `trip-photo-${slug}`;
+  return (
+    <ViewTransition name={name} share="trip-photo" default="none">
+      {children}
+    </ViewTransition>
+  );
+}
+
 /** Package card: DESIGN.md section 4, design-reference/trips.html. */
-export function TripCard({ trip, layout = "grid", sizes, className }: TripCardProps) {
+export function TripCard({ trip, layout = "grid", sizes, priority = false, className }: TripCardProps) {
   const href = tripHref(trip);
   const list = layout === "list";
 
   return (
     <article
       className={clsx(
-        "group flex flex-col overflow-hidden rounded-card border border-line bg-white",
+        "group card-lift flex flex-col overflow-hidden rounded-card border border-line bg-white hover:border-muted",
         list && "sm:flex-row",
         className,
       )}
@@ -47,19 +66,23 @@ export function TripCard({ trip, layout = "grid", sizes, className }: TripCardPr
           list && "sm:aspect-auto sm:min-h-[248px] sm:w-[38%] sm:shrink-0",
         )}
       >
-        <Image
-          src={trip.heroImage}
-          alt={trip.imageAlt}
-          fill
-          sizes={sizes ?? (list ? LIST_SIZES : GRID_SIZES)}
-          className="object-cover transition-transform duration-500 ease-out motion-safe:group-hover:scale-[1.03]"
-        />
+        <TripPhotoTransition slug={trip.slug}>
+          <Image
+            src={trip.heroImage}
+            alt={trip.imageAlt}
+            fill
+            sizes={sizes ?? (list ? LIST_SIZES : GRID_SIZES)}
+            loading={priority ? "eager" : undefined}
+            fetchPriority={priority ? "high" : undefined}
+            className="card-photo object-cover"
+          />
+        </TripPhotoTransition>
         {trip.badge && (
           <Badge variant="white" className="absolute top-3.5 left-3.5">
             {trip.badge}
           </Badge>
         )}
-        <SaveTripButton tripTitle={trip.title} className="absolute top-3 right-3" />
+        <SaveTripButton tripTitle={trip.title} className="absolute top-2.5 right-2.5" />
       </div>
 
       <div className={clsx("flex flex-1 flex-col gap-2.5 px-5 pt-5 pb-[22px]", list && "sm:px-6 sm:pt-[22px]")}>
@@ -72,7 +95,7 @@ export function TripCard({ trip, layout = "grid", sizes, className }: TripCardPr
         </div>
 
         <h3 className="text-card">
-          <Link href={href} className="text-ink no-underline transition-colors hover:text-brand-dark">
+          <Link href={href} className="tap-target relative text-ink no-underline transition-colors duration-(--duration-base) ease-out group-hover:text-brand hover:text-brand">
             {trip.title}
           </Link>
         </h3>

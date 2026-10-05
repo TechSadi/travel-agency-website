@@ -13,7 +13,7 @@ type TripActionsProps = {
 };
 
 const photoButton =
-  "inline-flex size-10 items-center justify-center rounded-pill bg-white/92 text-ink transition-colors hover:bg-white hover:text-ink";
+  "inline-flex size-11 items-center justify-center rounded-pill bg-white/92 text-ink transition-colors hover:bg-white hover:text-ink";
 
 /** Save (demo toggle, not stored) and Share (system share sheet, or copy the link). */
 export function TripActions({ title, variant, className }: TripActionsProps) {

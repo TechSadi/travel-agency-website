@@ -25,7 +25,7 @@ export function Breadcrumb({ items, tone = "default" }: BreadcrumbProps) {
                     {item.label}
                   </span>
                 ) : (
-                  <Link href={item.href} className={clsx("no-underline", light ? "text-topbar-text hover:text-white" : "text-muted hover:text-brand-dark")}>
+                  <Link href={item.href} className={clsx("tap-target link-slide relative no-underline", light ? "text-topbar-text hover:text-white" : "text-muted hover:text-brand-dark")}>
                     {item.label}
                   </Link>
                 )}

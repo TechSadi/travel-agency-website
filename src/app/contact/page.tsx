@@ -3,6 +3,7 @@ import { Clock, Mail, MapPin, Phone } from "lucide-react";
 import type { Metadata } from "next";
 import { ContactCard } from "@/components/contact/ContactCard";
 import { ContactForm } from "@/components/contact/ContactForm";
+import { PageMain } from "@/components/layout/PageMain";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { Container } from "@/components/ui/Container";
 import { WhatsAppIcon } from "@/components/ui/WhatsAppIcon";
@@ -13,19 +14,12 @@ import { formatMonth } from "@/data/tripList";
 import { getTripBySlug } from "@/data/trips";
 import { emptyEnquiry, FLEXIBLE, NOT_SURE, travellerOptions, travellersLabel, type EnquiryValues } from "@/lib/enquiry";
 import { formatDepartureDate, formatDuration } from "@/lib/format";
+import { pageMetadata } from "@/lib/seo";
 
 const description =
   "Call, WhatsApp or visit Suman Holidays at Blue Diamond Complex, Fatehgunj, Vadodara. Tell us where you want to go and a travel consultant will call you back today.";
 
-export const metadata: Metadata = {
-  title: "Contact us",
-  description,
-  openGraph: {
-    title: "Contact us | Suman Holidays",
-    description,
-    images: [{ url: "/images/office-desk.jpg", alt: "Inside the Suman Holidays office in Fatehgunj, Vadodara" }],
-  },
-};
+export const metadata: Metadata = pageMetadata({ title: "Contact us", description, path: "/contact" });
 
 /** This month and the next 11, as "December 2026". */
 function upcomingMonths(count = 12): string[] {
@@ -76,17 +70,17 @@ export default async function ContactPage({ searchParams }: PageProps<"/contact"
   const monthOptions = [FLEXIBLE, ...upcomingMonths()];
 
   return (
-    <main>
+    <PageMain>
       <section className="bg-paper">
         <Container className="pt-8 pb-12 md:pt-12 md:pb-14">
           <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "Contact" }]} />
-          <h1 className="mt-4 mb-3 text-page">
+          <h1 className="intro mt-4 mb-3 text-page">
             Let’s plan your next holiday
           </h1>
-          <p className="mb-9 max-w-[36rem] text-[1.15rem] text-body">
+          <p className="intro intro-2 mb-9 max-w-[36rem] text-[1.15rem] text-body">
             Call, message or walk in. You’ll talk to the same consultant from first idea to the day you fly home.
           </p>
-          <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,280px),1fr))] gap-5">
+          <div className="intro intro-3 grid grid-cols-[repeat(auto-fit,minmax(min(100%,280px),1fr))] gap-5">
             <ContactCard
               icon={<Phone size={24} strokeWidth={1.8} aria-hidden="true" />}
               tone="brand"
@@ -136,7 +130,7 @@ export default async function ContactPage({ searchParams }: PageProps<"/contact"
               href={site.mapsUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="absolute bottom-8 left-4 inline-flex min-h-10 items-center gap-2 rounded-control bg-white px-3.5 text-[0.95rem] font-medium text-ink no-underline shadow-float"
+              className="absolute bottom-8 left-4 inline-flex min-h-11 items-center gap-2 rounded-control bg-white px-3.5 text-[0.95rem] font-medium text-ink no-underline shadow-float"
             >
               <MapPin size={16} strokeWidth={1.8} aria-hidden="true" className="text-brand" />
               Open in Google Maps
@@ -168,6 +162,6 @@ export default async function ContactPage({ searchParams }: PageProps<"/contact"
           </div>
         </aside>
       </Container>
-    </main>
+    </PageMain>
   );
 }

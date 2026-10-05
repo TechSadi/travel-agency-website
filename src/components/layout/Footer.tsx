@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { Container } from "@/components/ui/Container";
-import { FacebookIcon, InstagramIcon, YouTubeIcon } from "@/components/ui/SocialIcons";
+import { FacebookIcon, InstagramIcon } from "@/components/ui/SocialIcons";
 import { WhatsAppIcon } from "@/components/ui/WhatsAppIcon";
 import { footerNav, legalLinks } from "@/data/navigation";
 import { site } from "@/data/site";
@@ -11,16 +11,15 @@ import { site } from "@/data/site";
 const socialIcons: Record<(typeof site.social)[number]["label"], ReactNode> = {
   Facebook: <FacebookIcon />,
   Instagram: <InstagramIcon />,
-  YouTube: <YouTubeIcon />,
 };
 
 const socialLinks = [
-  ...site.social.map((s) => ({ ...s, icon: socialIcons[s.label], external: false })),
+  ...site.social.map((s) => ({ ...s, icon: socialIcons[s.label], external: true })),
   { label: "WhatsApp", href: site.whatsapp.href, icon: <WhatsAppIcon size={18} />, external: true },
 ];
 
 const columnHeading = "m-0 mb-1 font-sans text-[1rem] font-semibold text-white";
-const footerLink = "text-footer-text no-underline transition-colors hover:text-white";
+const footerLink = "tap-target link-slide relative text-footer-text no-underline transition-colors hover:text-white";
 
 function ContactLine({ icon: Icon, children }: { icon: LucideIcon; children: ReactNode }) {
   return (
@@ -59,7 +58,7 @@ export function Footer() {
             <h2 id={`footer-${column.title}`} className={columnHeading}>
               {column.title}
             </h2>
-            <ul className="mt-3 flex flex-col gap-3">
+            <ul className="mt-3 flex flex-col gap-5">
               {column.links.map((link) => (
                 <li key={link.label}>
                   <Link href={link.href} className={footerLink}>
@@ -73,7 +72,7 @@ export function Footer() {
 
         <div className="flex flex-col">
           <h2 className={columnHeading}>Visit or call</h2>
-          <ul className="mt-3.5 flex flex-col gap-3.5">
+          <ul className="mt-3.5 flex flex-col gap-4">
             <ContactLine icon={MapPin}>{site.address.full}</ContactLine>
             <ContactLine icon={Phone}>
               <a href={site.phone.href} className={footerLink}>
@@ -92,10 +91,10 @@ export function Footer() {
 
       <Container className="flex flex-wrap justify-between gap-3 border-t border-footer-line pt-[22px] pb-[30px] text-[0.92rem] text-footer-muted">
         <p className="m-0">© 2026 {site.name}. All rights reserved.</p>
-        <ul className="flex flex-wrap gap-x-6 gap-y-2">
+        <ul className="flex flex-wrap gap-x-6 gap-y-[22px]">
           {legalLinks.map((link) => (
             <li key={link.label}>
-              <Link href={link.href} className="text-footer-muted no-underline transition-colors hover:text-white">
+              <Link href={link.href} className="tap-target link-slide relative text-footer-muted no-underline transition-colors hover:text-white">
                 {link.label}
               </Link>
             </li>

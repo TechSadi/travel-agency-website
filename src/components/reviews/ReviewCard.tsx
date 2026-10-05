@@ -1,6 +1,5 @@
 import clsx from "clsx";
 import { StarRating } from "@/components/ui/StarRating";
-import { getTripBySlug } from "@/data/trips";
 import type { Review } from "@/data/types";
 
 const SKIPPED_WORDS = new Set(["and", "dr", "mr", "mrs", "ms"]);
@@ -20,8 +19,6 @@ type ReviewCardProps = {
 
 /** Traveller quote with stars and an initials avatar: DESIGN.md section 4. */
 export function ReviewCard({ review, className }: ReviewCardProps) {
-  const tripName = review.tripLabel ?? getTripBySlug(review.tripSlug)?.title;
-
   return (
     <figure className={clsx("flex flex-col gap-[18px] rounded-card border border-line bg-white p-[30px]", className)}>
       <StarRating rating={review.rating} stars={5} size={15} showValue={false} />
@@ -36,8 +33,8 @@ export function ReviewCard({ review, className }: ReviewCardProps) {
         <span className="flex flex-col leading-[1.3]">
           <strong className="font-semibold">{review.name}</strong>
           <span className="text-[0.92rem] text-muted">
-            {review.city}
-            {tripName && `, ${tripName}`}
+            Google review
+            {review.topic && `, ${review.topic}`}
           </span>
         </span>
       </figcaption>

@@ -14,7 +14,7 @@
   --color-line: #e6e1d8;
   --color-white: #ffffff;
   --color-gold: #d99a1e;
-  --color-whatsapp: #1f8f4e;
+  --color-whatsapp: #197a43; /* DESIGN.md's #1f8f4e is 4.1:1 on white; darkened to pass 4.5:1 */
   --color-whatsapp-tint: #e7f5ec;
   --color-success-tint: #f1f8f3;
   --color-footer-text: #c5cdd4;
@@ -77,6 +77,65 @@
   --text-price--line-height: 1.2;
   --text-price-lg: 2rem;
   --text-price-lg--line-height: 1.2;
+
+  /*
+   * Motion (DESIGN.md section 8): one ease-out curve for everything. Overrides Tailwind's
+   * `ease-out`, so existing `ease-out` utilities use it too. Durations: `duration-(--duration-base)`.
+   */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-fast: 150ms;
+  --duration-base: 250ms;
+  --duration-slow: 500ms;
+  /* Entrances: page intros, scroll reveals and page transitions. */
+  --duration-enter: 750ms;
+  /* Photos settling inside their frames as they reveal, and the hero photo on load. */
+  --duration-photo: 1200ms;
+  --duration-hero-zoom: 2400ms;
+  /* Trip card photo morphing into the trip gallery. */
+  --duration-morph: 600ms;
+
+  /* Card hover lift (DESIGN.md section 3: cards rest on a border; the shadow is for hover only). */
+  --shadow-card-hover: 0 22px 40px -26px rgba(22, 32, 42, 0.38);
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    translate: 0 24px;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+/* Lightbox photo: each new photo settles in. */
+@keyframes photo-in {
+  from {
+    opacity: 0;
+    scale: 0.98;
+  }
+}
+
+@keyframes hero-zoom {
+  from {
+    scale: 1.1;
+  }
+}
+
+/* A photo settling inside its frame as its card reveals. */
+@keyframes photo-settle {
+  from {
+    scale: 1.12;
+  }
 }
 
 /* Fonts come from next/font CSS variables set on <html> in layout.tsx */
@@ -133,8 +192,10 @@
     *::before,
     *::after {
       animation-duration: 0.01ms !important;
+      animation-delay: 0s !important;
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
+      transition-delay: 0s !important;
       scroll-behavior: auto !important;
     }
   }
@@ -146,6 +207,192 @@
  */
 body:has([data-page-action-bar]) [data-global-action-bar] {
   display: none;
+}
+
+/*
+ * View transitions (React <ViewTransition>, DESIGN.md section 8). Route changes crossfade the
+ * page (PageMain); the header stays put; a trip card photo morphs into the trip gallery.
+ */
+::view-transition {
+  /* Clicks during a transition reach the live page. */
+  pointer-events: none;
+}
+
+/* The old page lifts away as it fades; the new one rises into place just behind it. */
+@keyframes page-out {
+  to {
+    opacity: 0;
+    translate: 0 -8px;
+  }
+}
+@keyframes page-in {
+  from {
+    opacity: 0;
+    translate: 0 16px;
+  }
+}
+
+::view-transition-old(.page-fade) {
+  animation: 250ms var(--ease-out) both page-out;
+}
+::view-transition-new(.page-fade) {
+  animation: 450ms var(--ease-out) 120ms both page-in;
+}
+
+::view-transition-group(site-header) {
+  animation: none;
+  z-index: 100;
+}
+::view-transition-old(site-header) {
+  display: none;
+}
+::view-transition-new(site-header) {
+  animation: none;
+}
+
+::view-transition-group(.trip-photo) {
+  animation-duration: var(--duration-morph);
+  animation-timing-function: var(--ease-out);
+  z-index: 50;
+}
+/* Card (4:3) and gallery tile differ in shape: crop, don't stretch. */
+::view-transition-old(.trip-photo),
+::view-transition-new(.trip-photo) {
+  height: 100%;
+  object-fit: cover;
+}
+/* A photo with no partner on the other page (e.g. a related-trip card) fades with the page. */
+::view-transition-old(.trip-photo):only-child {
+  animation: 250ms var(--ease-out) both page-out;
+}
+::view-transition-new(.trip-photo):only-child {
+  animation: 450ms var(--ease-out) 120ms both page-in;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
+}
+
+/*
+ * Scroll reveals (ScrollReveal.tsx), once each:
+ * - Headings (`[data-reveal]`): the h2 rises from behind its own baseline, then the text and
+ *   link beside it fade up.
+ * - Card groups (`[data-reveal="group"]`): each card fades up 32px, 90ms after the one before,
+ *   while its photo settles from 1.12 inside the frame.
+ * Fill mode is `backwards`, not `both`: once a reveal ends, the element's own styles (the card
+ * hover lift and photo zoom) take over again.
+ */
+@keyframes reveal {
+  from {
+    opacity: 0;
+    translate: 0 32px;
+  }
+}
+
+/*
+ * Translating by 100% of its height while clipping the same 100% off the bottom keeps the
+ * clip edge fixed at the heading's baseline, so the text rises out of an invisible slot.
+ * The negative insets leave room for descenders and the focus ring.
+ */
+@keyframes mask-rise {
+  from {
+    opacity: 0;
+    translate: 0 100%;
+    clip-path: inset(-0.2em -0.2em 100% -0.2em);
+  }
+  40% {
+    opacity: 1;
+  }
+  to {
+    translate: 0 0;
+    clip-path: inset(-0.2em -0.2em -0.3em -0.2em);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  [data-reveal]:not([data-reveal="group"])[data-reveal-state="pending"],
+  [data-reveal="group"][data-reveal-state="pending"] > * {
+    opacity: 0;
+  }
+
+  [data-reveal]:not([data-reveal="group"])[data-reveal-state="in"] {
+    & h2 {
+      animation: mask-rise 900ms var(--ease-out) backwards;
+    }
+    & p:not(h2 *),
+    & a:not(p a, h2 *) {
+      animation: reveal var(--duration-enter) var(--ease-out) 200ms backwards;
+    }
+  }
+
+  [data-reveal="group"][data-reveal-state="in"] > * {
+    animation: reveal var(--duration-enter) var(--ease-out) var(--reveal-delay, 0ms) backwards;
+
+    & img {
+      animation: photo-settle var(--duration-photo) var(--ease-out) var(--reveal-delay, 0ms) backwards;
+    }
+  }
+  [data-reveal="group"] > :nth-child(2) {
+    --reveal-delay: 90ms;
+  }
+  [data-reveal="group"] > :nth-child(3) {
+    --reveal-delay: 180ms;
+  }
+  [data-reveal="group"] > :nth-child(4) {
+    --reveal-delay: 270ms;
+  }
+  [data-reveal="group"] > :nth-child(5) {
+    --reveal-delay: 360ms;
+  }
+  [data-reveal="group"] > :nth-child(n + 6) {
+    --reveal-delay: 450ms;
+  }
+
+  /* Page intros on load (hero, page title bands): fade up in sequence. Pure CSS, so it runs before JS. */
+  .intro {
+    animation: fade-up var(--duration-enter) var(--ease-out) var(--intro-delay, 0ms) backwards;
+  }
+  .intro-2 {
+    --intro-delay: 120ms;
+  }
+  .intro-3 {
+    --intro-delay: 240ms;
+  }
+  .intro-4 {
+    --intro-delay: 360ms;
+  }
+}
+
+/*
+ * Card hover: the card lifts 4px onto a soft shadow and its photo eases in to 1.05.
+ * Put `card-lift` on the card, and `card-photo` on its <Image>. Pointer devices only.
+ */
+@utility card-lift {
+  transition-property: translate, box-shadow, border-color;
+  transition-duration: var(--duration-slow);
+  transition-timing-function: var(--ease-out);
+
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    &:hover {
+      translate: 0 -4px;
+      box-shadow: var(--shadow-card-hover);
+    }
+  }
+}
+
+@utility card-photo {
+  transition: scale 700ms var(--ease-out);
+
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    :is(.group, .card-lift):hover & {
+      scale: 1.05;
+    }
+  }
 }
 
 /*
@@ -196,7 +443,8 @@ body:has([data-page-action-bar]) [data-global-action-bar] {
 
 /*
  * Thumbs for the overlaid range inputs of the budget slider (BudgetRange.tsx): the input
- * itself is transparent and ignores the pointer, so only the 20px thumbs can be dragged.
+ * itself is transparent and ignores the pointer, so only the thumbs can be dragged. Each
+ * thumb is a 44px touch target; a 12px transparent border leaves a visible 20px circle.
  */
 @utility range-thumb {
   appearance: none;
@@ -206,17 +454,18 @@ body:has([data-page-action-bar]) [data-global-action-bar] {
 
   &::-webkit-slider-runnable-track {
     background: transparent;
-    height: 24px;
+    height: 44px;
   }
   &::-webkit-slider-thumb {
     appearance: none;
     pointer-events: auto;
-    width: 20px;
-    height: 20px;
-    margin-top: 2px;
-    border: 2px solid var(--color-brand);
+    box-sizing: border-box;
+    width: 44px;
+    height: 44px;
+    border: 12px solid transparent;
     border-radius: 999px;
-    background: var(--color-white);
+    background: var(--color-white) padding-box;
+    box-shadow: inset 0 0 0 2px var(--color-brand);
     cursor: grab;
   }
   &::-moz-range-track {
@@ -225,22 +474,68 @@ body:has([data-page-action-bar]) [data-global-action-bar] {
   &::-moz-range-thumb {
     pointer-events: auto;
     box-sizing: border-box;
-    width: 20px;
-    height: 20px;
-    border: 2px solid var(--color-brand);
+    width: 44px;
+    height: 44px;
+    border: 12px solid transparent;
     border-radius: 999px;
-    background: var(--color-white);
+    background: var(--color-white) padding-box;
+    box-shadow: inset 0 0 0 2px var(--color-brand);
     cursor: grab;
   }
   &:focus-visible {
     outline: none;
   }
+  /* The ring hugs the visible circle, not the transparent touch area. */
   &:focus-visible::-webkit-slider-thumb {
     outline: 3px solid var(--color-brand);
-    outline-offset: 3px;
+    outline-offset: -9px;
   }
   &:focus-visible::-moz-range-thumb {
+    box-shadow: inset 0 0 0 2px var(--color-brand);
     outline: 3px solid var(--color-brand);
-    outline-offset: 3px;
+    outline-offset: -9px;
+  }
+}
+
+/*
+ * Underline that slides in from the left on hover and keyboard focus, for links with no
+ * resting underline. Uses ::before because tap-target owns ::after. Needs a positioned
+ * element. On an inner span, the parent link's hover or focus triggers it.
+ */
+@utility link-slide {
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -2px;
+    height: 1px;
+    background-color: currentColor;
+    scale: 0 1;
+    transform-origin: left;
+    transition: scale var(--duration-base) var(--ease-out);
+    pointer-events: none;
+  }
+  &:hover::before,
+  &:focus-visible::before,
+  a:hover > &::before,
+  a:focus-visible > &::before {
+    scale: 1 1;
+  }
+}
+
+/*
+ * A 44×44px minimum touch area for small text links and buttons (DESIGN.md section 8),
+ * without changing their visual size or the layout. Needs a positioned element.
+ */
+@utility tap-target {
+  &::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: max(100%, 44px);
+    height: max(100%, 44px);
+    translate: -50% -50%;
   }
 }

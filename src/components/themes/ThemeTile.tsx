@@ -22,11 +22,11 @@ export function ThemeTile({ theme, sizes, className }: ThemeTileProps) {
           src={theme.image}
           alt=""
           fill
-          sizes={sizes ?? "(min-width: 1280px) 305px, (min-width: 980px) 25vw, (min-width: 640px) 50vw, 100vw"}
-          className="object-cover transition-transform duration-500 ease-out motion-safe:group-hover:scale-[1.03]"
+          sizes={sizes ?? "(min-width: 1280px) 305px, (min-width: 980px) 25vw, 50vw"}
+          className="card-photo object-cover"
         />
       </div>
-      <span className="font-serif text-[1.55rem] leading-[1.1] font-medium">{theme.title}</span>
+      <span className="font-serif text-[1.55rem] leading-[1.1] font-medium transition-colors duration-(--duration-base) ease-out group-hover:text-brand">{theme.title}</span>
       <span className="-mt-1.5 text-muted">{theme.description}</span>
     </Link>
   );

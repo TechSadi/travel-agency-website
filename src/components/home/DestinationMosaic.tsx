@@ -50,6 +50,7 @@ export function DestinationMosaic() {
       {/* Phones: horizontal scroll row that bleeds to the screen edges. */}
       <ul
         aria-label="Destinations"
+        data-reveal="group"
         className="-mx-[var(--gutter)] flex snap-x snap-mandatory scroll-px-[var(--gutter)] gap-3 overflow-x-auto px-[var(--gutter)] scrollbar-none md:hidden"
       >
         {mobile.map((destination) => (
@@ -60,7 +61,7 @@ export function DestinationMosaic() {
       </ul>
 
       {/* Tablet and desktop: mosaic. */}
-      <ul className="hidden auto-rows-[270px] grid-cols-3 gap-5 md:grid lg:grid-cols-4">
+      <ul data-reveal="group" className="hidden auto-rows-[270px] grid-cols-3 gap-5 md:grid lg:grid-cols-4">
         {first && (
           <li className="row-span-2 grid">
             <DestinationTile destination={first} size="large" sizes="(min-width: 1280px) 310px, (min-width: 980px) 25vw, 33vw" />

@@ -13,7 +13,7 @@ export function TravelThemes() {
         className="max-md:mb-[18px]"
         title="Travel the way you like"
       />
-      <div className="grid grid-cols-2 gap-x-4 gap-y-7 md:gap-6 lg:grid-cols-4">
+      <div data-reveal="group" className="grid grid-cols-2 gap-x-4 gap-y-7 md:gap-6 lg:grid-cols-4">
         {themes.map((theme) => (
           <ThemeTile key={theme.type} theme={theme} />
         ))}

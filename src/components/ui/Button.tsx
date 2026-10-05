@@ -13,8 +13,9 @@ const variantClasses: Record<ButtonVariant, string> = {
   whatsapp: "bg-whatsapp border-whatsapp text-white hover:brightness-95 hover:text-white",
 };
 
+// sm is 44px rather than DESIGN.md's 40px, the minimum touch target size.
 const sizeClasses: Record<ButtonSize, string> = {
-  sm: "min-h-10 px-4",
+  sm: "min-h-11 px-4",
   md: "min-h-12 px-[22px]",
   lg: "min-h-[54px] px-7",
 };
@@ -32,7 +33,7 @@ type ButtonAsButton = CommonProps & { href?: undefined } & Omit<ComponentProps<"
 
 export function buttonClasses(variant: ButtonVariant = "primary", size: ButtonSize = "md", className?: string) {
   return clsx(
-    "inline-flex items-center justify-center gap-2.5 whitespace-nowrap rounded-control border font-sans text-[1rem] font-medium no-underline transition-colors",
+    "inline-flex items-center justify-center gap-2.5 whitespace-nowrap rounded-control border font-sans text-[1rem] font-medium no-underline transition-[color,background-color,border-color,scale] duration-(--duration-base) ease-out motion-safe:active:scale-[0.98]",
     variantClasses[variant],
     sizeClasses[size],
     className,

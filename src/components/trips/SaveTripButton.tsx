@@ -20,7 +20,7 @@ export function SaveTripButton({ tripTitle, className }: SaveTripButtonProps) {
       aria-pressed={saved}
       onClick={() => setSaved((value) => !value)}
       className={clsx(
-        "inline-flex size-10 items-center justify-center rounded-pill bg-white/92 transition-colors hover:bg-white",
+        "inline-flex size-11 items-center justify-center rounded-pill bg-white/92 transition-colors hover:bg-white",
         saved ? "text-brand" : "text-ink",
         className,
       )}

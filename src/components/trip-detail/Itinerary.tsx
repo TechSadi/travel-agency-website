@@ -31,7 +31,7 @@ export function Itinerary({ id, days }: ItineraryProps) {
         <button
           type="button"
           onClick={() => setOpen(allOpen ? new Set() : new Set(days.map((d) => d.day)))}
-          className="font-medium text-ink underline underline-offset-[5px] transition-colors hover:text-brand-dark"
+          className="tap-target relative font-medium text-ink underline underline-offset-[5px] transition-colors hover:text-brand-dark"
         >
           {allOpen ? "Collapse all" : "Expand all"}
         </button>
@@ -66,7 +66,7 @@ export function Itinerary({ id, days }: ItineraryProps) {
                     size={20}
                     strokeWidth={1.8}
                     aria-hidden="true"
-                    className={clsx("shrink-0 transition-transform duration-300", isOpen && "rotate-180")}
+                    className={clsx("shrink-0 transition-transform duration-(--duration-base) ease-out", isOpen && "rotate-180")}
                   />
                 </button>
               </h3>

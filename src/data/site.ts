@@ -43,10 +43,12 @@ export const site = {
   },
   mapsUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapsQuery)}`,
   mapsEmbedUrl: `https://www.google.com/maps?q=${encodeURIComponent(mapsQuery)}&output=embed`,
+  /** Google Maps listing, where all Google reviews of the agency can be read. */
+  googleReviewsUrl:
+    "https://www.google.com/maps/place/Suman+Holidays/@22.3240044,73.1887347,17z/data=!3m1!4b1!4m6!3m5!1s0x395fcf366d9885d3:0x1a6c89d859374ed9!8m2!3d22.3240044!4d73.1887347!16s%2Fg%2F11bbygmnlt?entry=ttu&g_ep=EgoyMDI2MDkzMC4wIKXMDSoASAFQAw%3D%3D",
   social: [
-    { label: "Facebook", href: "#" },
-    { label: "Instagram", href: "#" },
-    { label: "YouTube", href: "#" },
+    { label: "Facebook", href: "https://www.facebook.com/sumangoholidays/" },
+    { label: "Instagram", href: "https://www.instagram.com/sumanholidays/" },
   ],
 } as const;
 

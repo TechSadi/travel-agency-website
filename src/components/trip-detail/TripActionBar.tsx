@@ -17,7 +17,7 @@ export function TripActionBar({ title, priceFrom }: TripActionBarProps) {
       className="fixed inset-x-0 bottom-0 z-30 flex items-center justify-between gap-3 border-t border-line bg-white px-4 pt-2.5 pb-[calc(14px+env(safe-area-inset-bottom))] shadow-bar md:hidden"
     >
       <p className="flex flex-col leading-[1.2]">
-        <span className="text-[0.8rem] text-muted">From, per person</span>
+        <span className="text-[0.85rem] text-muted">From, per person</span>
         <span className="text-[1.35rem] font-semibold">{formatRupees(priceFrom)}</span>
       </p>
       <div className="flex gap-2">

@@ -1,74 +1,37 @@
 import type { Review } from "./types";
 
+// Real Google reviews of Suman Holidays, quoted as posted (emoji removed).
 export const reviews: Review[] = [
   {
-    name: "Priya and Karan Desai",
-    city: "Vadodara",
-    tripSlug: "maldives-overwater-escape",
+    name: "Himani S.",
     rating: 5,
     quote:
-      "Visas, flights, the seaplane to the resort, even the cake on our anniversary night. We didn’t have to think about anything except enjoying the trip.",
+      "Suman Holidays did a great job arranging our trip. Everything was well planned, from transportation to hotel bookings, which made our journey smooth and stress-free. The team was helpful, responsive, and ensured we had a wonderful travel experience. I would definitely recommend Suman Holidays for anyone looking for a well-organized and enjoyable trip.",
   },
   {
-    name: "Nirav Patel",
-    city: "Anand",
-    tripSlug: "dubai-city-lights",
+    name: "Hetal Dhaibar",
+    topic: "Thailand group tour",
     rating: 5,
     quote:
-      "I travelled with my parents and two kids. The itinerary had rest built in, the hotel was walking distance from the metro, and the desert safari was the highlight for everyone.",
+      "It was excellent management of Thailand Tour, we all enjoyed a lot without any trouble, best services by Suman Travels. Thanks a lot from Jayesh Shitoryu Karate Federation.",
   },
   {
-    name: "Meera Joshi",
-    city: "Vadodara",
-    tripSlug: "kashmir-paradise-on-earth",
-    tripLabel: "Kashmir group tour",
+    name: "Manav Dhaiber",
+    topic: "Singapore visa",
+    rating: 5,
+    quote: "I have applied Singapore visa through Suman Travels, process was super smooth. Entire team is helpful.",
+  },
+  {
+    name: "Sasan Gir Jungle Safari",
+    topic: "Gir jungle safari",
     rating: 5,
     quote:
-      "Fourteen of us from the office went to Kashmir. One WhatsApp group, one tour manager, and not a single mix-up in seven days.",
+      "My jungle safari with Sasan Gir Jungle Safari from Suman Holidays was absolutely incredible! We saw so much wildlife and the guides were so knowledgeable. The whole experience was perfectly organized. Highly recommend this adventure!",
   },
   {
-    name: "Rakesh and Sonal Shah",
-    city: "Surat",
-    tripSlug: "kashmir-paradise-on-earth",
+    name: "Manish Macwan",
     rating: 5,
     quote:
-      "Our driver Bashir bhai became part of the family by day three. The houseboat night was magical, and the kids still talk about the snow in Gulmarg.",
-  },
-  {
-    name: "Hetal and Chirag Parikh",
-    city: "Ahmedabad",
-    tripSlug: "bali-temples-and-beaches",
-    rating: 5,
-    quote:
-      "Kavya told us to save Nusa Penida for a clear day, and she was right. Every hotel had Jain breakfast ready without us asking twice.",
-  },
-  {
-    name: "Jignesh Bhatt",
-    city: "Rajkot",
-    tripSlug: "everest-base-camp-trek",
-    tripLabel: "Everest Base Camp group trek",
-    rating: 5,
-    quote:
-      "Our guide Pasang walked at the pace of the slowest person and checked our oxygen every evening. All eleven of us reached base camp.",
-  },
-  {
-    name: "Dr. Bhavna Thakkar",
-    city: "Bhavnagar",
-    tripSlug: "kenya-wildlife-safari",
-    rating: 5,
-    quote:
-      "They reminded us about the yellow fever certificate a month before we flew. In the Mara we saw a cheetah with three cubs on the second morning.",
-  },
-  {
-    name: "Ankit and Riddhi Vyas",
-    city: "Gandhinagar",
-    tripSlug: "santorini-and-athens",
-    rating: 4,
-    quote:
-      "The Schengen file was ready in one visit to the office. Santorini in December was quiet and the sunsets were all ours, though a few cafés in Oia were shut.",
+      "My first experience is really mind blowing. They work is too good and they know how to talk with customers, and I fully satisfied.",
   },
 ];
-
-export function getReviewsByTrip(tripSlug: string): Review[] {
-  return reviews.filter((review) => review.tripSlug === tripSlug);
-}

@@ -19,7 +19,7 @@ export function Collapsible({ id, open, className, children }: CollapsibleProps)
       id={id}
       inert={!open}
       className={clsx(
-        "grid transition-[grid-template-rows] duration-300 ease-out",
+        "grid transition-[grid-template-rows] duration-(--duration-base) ease-out",
         open ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
       )}
     >

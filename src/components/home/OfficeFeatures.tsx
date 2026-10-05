@@ -12,11 +12,11 @@ export function OfficeFeatures() {
     <HomeSection labelledBy="home-team" paper containerClassName="flex flex-wrap items-center gap-x-14 gap-y-16">
       <div className="relative flex-[1_1_420px]">
         <Image
-          src="/images/office-desk.jpg"
-          alt="A Suman Holidays travel consultant at her desk"
-          width={1200}
-          height={960}
-          sizes="(min-width: 1280px) 600px, (min-width: 980px) 48vw, 100vw"
+          src="/images/office-Interior-1.png"
+          alt="Inside the Suman Holidays office: consultant desks, a glass-walled meeting room and private cabins"
+          width={1672}
+          height={941}
+          sizes="(min-width: 1280px) 600px, (min-width: 1040px) 48vw, 100vw"
           className="block aspect-[5/4] w-full rounded-panel object-cover"
         />
         <div className="absolute -bottom-7 left-4 max-w-[290px] rounded-card border border-line bg-white px-[22px] py-5 shadow-float md:left-6">
@@ -38,7 +38,7 @@ export function OfficeFeatures() {
           title="One team, from visa to homecoming"
           description="We plan, book and look after every part of your holiday, so you deal with one person instead of five websites."
         />
-        <ul className="mt-10 grid gap-x-7 gap-y-8 sm:grid-cols-2">
+        <ul data-reveal="group" className="mt-10 grid gap-x-7 gap-y-8 sm:grid-cols-2">
           {serviceFeatures.map(({ icon, title, text }) => {
             const Icon = homeIcons[icon];
             return (

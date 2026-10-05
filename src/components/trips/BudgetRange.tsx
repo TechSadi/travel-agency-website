@@ -36,8 +36,8 @@ export function BudgetRange({ min, max, step, low, high, onCommit, idPrefix }: B
     onCommit(lo <= min ? null : lo, hi >= max ? null : hi);
   };
   const fraction = (value: number) => (value - min) / (max - min);
-  // Thumbs are 20px and travel inside the track, so map values onto (100% - 20px).
-  const at = (value: number) => `calc(10px + (100% - 20px) * ${fraction(value)})`;
+  // Thumbs are 44px touch targets that travel inside the input, so map values onto (100% - 44px).
+  const at = (value: number) => `calc(22px + (100% - 44px) * ${fraction(value)})`;
 
   const shared = {
     min,
@@ -46,16 +46,17 @@ export function BudgetRange({ min, max, step, low, high, onCommit, idPrefix }: B
     onPointerUp: commit,
     onKeyUp: commit,
     onBlur: commit,
-    className: "range-thumb absolute inset-0 h-6 w-full",
+    className: "range-thumb absolute inset-0 h-11 w-full",
   };
 
   return (
     <div>
-      <div className="relative h-6">
-        <span aria-hidden="true" className="absolute inset-x-0 top-2.5 h-1 rounded-pill bg-line" />
+      {/* The thumbs' 12px transparent touch border sits outside the visible track at each end. */}
+      <div className="relative -my-2.5 h-11">
+        <span aria-hidden="true" className="absolute inset-x-3 top-5 h-1 rounded-pill bg-line" />
         <span
           aria-hidden="true"
-          className="absolute top-2.5 h-1 rounded-pill bg-brand"
+          className="absolute top-5 h-1 rounded-pill bg-brand"
           style={{ left: at(lo), right: `calc(100% - ${at(hi)})` }}
         />
         <input

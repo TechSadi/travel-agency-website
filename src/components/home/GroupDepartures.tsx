@@ -38,7 +38,7 @@ export function GroupDepartures() {
           rows={rows}
           limit={ROWS}
           heading={
-            <div>
+            <div data-reveal>
               <h2 id="home-departures" className={`m-0 max-w-[22ch] text-section ${mobileTitle}`}>
                 Group departures from Gujarat
               </h2>

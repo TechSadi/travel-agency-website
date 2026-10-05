@@ -3,6 +3,8 @@
 import clsx from "clsx";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useRef } from "react";
+import { SlidingIndicator, useSlidingIndicator } from "@/components/ui/SlidingIndicator";
 import { mainNav } from "@/data/navigation";
 
 /**
@@ -22,12 +24,19 @@ type NavLinksProps = {
   className?: string;
 };
 
-/** The main nav items with the active state from the current route. */
+/**
+ * The main nav items with the active state from the current route. On desktop the active
+ * underline is one bar that slides between items; until it is measured (and without JS)
+ * the active link draws its own border instead.
+ */
 export function NavLinks({ variant, onNavigate, className }: NavLinksProps) {
   const pathname = usePathname();
+  const listRef = useRef<HTMLUListElement>(null);
+  const desktop = variant === "desktop";
+  const indicator = useSlidingIndicator(listRef, pathname, desktop);
 
   return (
-    <ul className={clsx(variant === "desktop" ? "flex items-center gap-[30px]" : "flex flex-col", className)}>
+    <ul ref={listRef} className={clsx(desktop ? "relative flex items-center gap-[30px]" : "flex flex-col", className)}>
       {mainNav.map((item) => {
         const active = isActiveHref(pathname, item.href);
         return (
@@ -38,11 +47,12 @@ export function NavLinks({ variant, onNavigate, className }: NavLinksProps) {
               onClick={onNavigate}
               className={clsx(
                 "no-underline transition-colors",
-                variant === "desktop"
-                  ? "block border-b-2 py-1.5 text-[1rem]"
+                desktop
+                  ? "tap-target relative flex min-h-11 items-center border-b-2 text-[1rem]"
                   : "flex min-h-14 items-center border-b border-line text-[1.15rem]",
                 active ? "font-semibold text-brand" : "font-medium text-ink hover:text-brand",
-                variant === "desktop" && (active ? "border-brand" : "border-transparent"),
+                desktop && (active && !indicator ? "border-brand" : "border-transparent"),
+                desktop && !active && "link-slide",
               )}
             >
               {item.label}
@@ -50,6 +60,7 @@ export function NavLinks({ variant, onNavigate, className }: NavLinksProps) {
           </li>
         );
       })}
+      {desktop && <SlidingIndicator box={indicator} />}
     </ul>
   );
 }

@@ -208,7 +208,7 @@ type StepperProps = {
 };
 
 const stepButton =
-  "inline-flex size-9 items-center justify-center rounded-pill border border-line bg-white text-ink transition-colors hover:border-ink disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-line";
+  "inline-flex size-11 items-center justify-center rounded-pill border border-line bg-white text-ink transition-colors hover:border-ink disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-line";
 
 function Stepper({ label, hint, value, min, max, onChange, noun }: StepperProps) {
   const labelId = useId();
@@ -218,7 +218,7 @@ function Stepper({ label, hint, value, min, max, onChange, noun }: StepperProps)
         {label}
         {hint && <span className="text-[0.85rem] text-muted">{hint}</span>}
       </span>
-      <span className="inline-flex items-center gap-3.5">
+      <span className="inline-flex items-center gap-2.5">
         <button
           type="button"
           aria-label={`Fewer ${noun[1]}`}

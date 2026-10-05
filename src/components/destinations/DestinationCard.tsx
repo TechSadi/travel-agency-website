@@ -25,8 +25,8 @@ export function DestinationCard({ destination, sizes, className }: DestinationCa
           src={destination.image}
           alt=""
           fill
-          sizes={sizes ?? "(min-width: 1280px) 410px, (min-width: 980px) 33vw, (min-width: 640px) 50vw, 100vw"}
-          className="object-cover transition-transform duration-500 ease-out motion-safe:group-hover:scale-[1.03]"
+          sizes={sizes ?? "(min-width: 1280px) 410px, (min-width: 1060px) 33vw, (min-width: 690px) 50vw, 100vw"}
+          className="card-photo object-cover"
         />
         <Badge variant="white" className="absolute top-3.5 left-3.5">
           {destination.tripCount > 0 ? tripCountLabel(destination.tripCount) : "Custom trips"}
@@ -35,7 +35,7 @@ export function DestinationCard({ destination, sizes, className }: DestinationCa
 
       <div className="flex items-end justify-between gap-3">
         <span className="flex flex-col leading-[1.25]">
-          <span className="font-serif text-[1.6rem] font-medium">{destination.name}</span>
+          <span className="font-serif text-[1.6rem] font-medium transition-colors duration-(--duration-base) ease-out group-hover:text-brand">{destination.name}</span>
           <span className="text-[0.95rem] text-muted">{destination.country}</span>
         </span>
         {destination.priceFrom !== null && (
